@@ -8,7 +8,7 @@ from collections import deque
 from akun.models import Dompet, MyCourse
 from django.core.files.storage import  FileSystemStorage
 # Create your views here.
-
+a = 0
 def index(request):
 
 	ListCourse = Course.objects.all()
