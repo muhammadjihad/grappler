@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{judul}}</title>
+	{% include "snippets/styles.html" %}
+	<link rel="shortcut icon" type="image/png" href="{% static "img/mantap.png" %}"/>
+	{% block cssOpt %}
+		
+	{% endblock cssOpt %}
+</head>
+<body>
+	{# Navbar #}
+<section>
+	{% include "snippets/navbar.html" %}
+</section>
+{# Messages #}
+<section style="margin-top:100px">
+	{% if messages %}
+		{% for message in messages %}
+			<div class='alert-info mt-5'><h2>{{message}}</h2></div>
+		{% endfor %}	
+	{% endif %}
+</section>
+
+{# Header #}
+<section style="margin-top:100px;">
+	{% block header %}
+	
+	{% endblock header %}	
+</section>
+
+
+{# Konten1 #}
+<section style="margin-top:50px;">
+	{% block konten1 %}
+		
+		
+	{% endblock konten1 %}
+</section>
+	
+
+	
+{% include "snippets/scripts.html" %}
+{% block scriptsOpt %}
+		
+{% endblock scriptsOpt %}
+</body>
+</html>

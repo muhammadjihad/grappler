@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/graplearn/addvideocourse.css" %}">
+{% endblock cssOpt %}
+
+{% block header %}
+	<div class="container">
+		<h5>{{jumboTag}}</h5>
+	</div>
+{% endblock header %}
+
+{% block konten1 %}
+	<div class="container course">
+		<div class="row">
+			<div class="col-sm-6">
+				<img src="{{course.thumbnail.url}}" alt="">
+			</div>
+			<div class="col-sm-6 text-center ">
+				<div class="container judul">
+					<h5>{{course.judul}}</h5>
+				</div>
+				<div class="container status">
+					<div class="row">
+						<div class="col-sm-4">
+							<img src="{% static "img/view.png" %}" alt="">
+							<h6>{{course.view}}</h6>
+						</div>
+						<div class="col-sm-4">
+							<img src="{% static "img/like.png" %}" alt="">
+							<h6>{{course.like}}</h6>
+						</div>
+						<div class="col-sm-4">
+							<img src="{% static "img/share.png" %}" alt="">
+							<h6>{{course.share}}</h6>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="container currentvideo">
+					<h5>Video Sekarang</h5>
+					<ul class="list-group">
+						{% for video in videoCourses  %}
+							<li class="list-group-item">{{video.judul}}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<form method='POST' name='coursevideos' enctype="multipart/form-data">
+			{% csrf_token %}
+			{{videoCourseForm|crispy}}
+			<button type="submit" class="btn btn-primary">Upload</button>
+		</form>
+	</div>
+
+{% endblock konten1 %}

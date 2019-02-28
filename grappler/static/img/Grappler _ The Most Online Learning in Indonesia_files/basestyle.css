@@ -1,0 +1,11 @@
+body{
+	background-color: #EBECEC;
+}
+
+nav img{
+	width:100px;
+}
+
+nav div#navbarNav ul li a{
+	color:white;
+}

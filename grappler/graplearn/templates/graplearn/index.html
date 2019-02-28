@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/graplearn/index.css" %}">
+{% endblock cssOpt %}
+
+{% block header %}
+	<div class="container filterindex">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="row">
+					<div class="col-sm-6">
+						<a href="{% url "graplearn:createcourse" %}"><button type="submit" class="btn btn-outline-success">Buat Kursus</button></a>
+					</div>
+					<div class="col-sm-6">
+						<a href="{% url "graplearn:usercourses" %}"><button type="submit" class="btn btn-primary">My Courses</button></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8">
+				<div class="row">
+					<div class="col-sm-10">
+						<input type="text" class='form-group form-control' placeholder="Cari Berdasarkan Judul">
+					</div>
+					<div class="col-sm-2">
+						<button type="submit" class="btn btn-primary">Cari!</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+{% endblock header %}
+
+{% block konten1 %}
+		<div class="container course">
+			{% for course in ListCourse  %}
+			<a href="{% url "graplearn:detailcourse" course.id %}">
+				<div class="card text-center">
+					<img src="{{course.thumbnail.url}}" alt="">
+					<div class="card-body">
+						<a href="{% url "graplearn:detailcourse" course.id %}">
+							<div class="container judul">
+								<h5>{{course.judul}}</h5>
+							</div>
+						</a>
+						<div class="coursestatus mt-2">
+							<div class="row">
+								<div class="col-sm-4">
+									<img src="{% static "img/view.png" %}" alt="">
+									<small>{{course.view}}</small>
+								</div>
+								<div class="col-sm-4">
+									<img src="{% static "img/like.png" %}" alt="">
+									<small>{{course.like}}</small>
+								</div>
+								<div class="col-sm-4">
+									<img src="{% static "img/share.png" %}" alt="">
+									<small>{{course.share}}</small>
+								</div>
+							</div>
+						</div>
+						<div class="profilecontainer">
+							<hr>
+						<div class="row">
+							<div class="col-sm-4 fotoprofile">
+								<img src="{{course.user.profile.foto.url}}" alt="">
+							</div>
+							<div class="col-sm-8">
+								<a href="{% url "akun:otherprofile" course.user.id %}"><h5>{{course.user.profile.username}}</h5></a>
+								<div class="boxlevel">
+									<small>{{course.user.profile.get_user_level_display}}</small>
+								</div>
+							</div>	
+						</div>
+						<hr>
+						</div>
+						<div class="deskripsi">
+							<p>{{course.deskripsi}}</p>
+						</div>
+						{% if current_user %}
+							<div class="updatebutton">
+								<a href=""><button class="btn btn-warning">Update</button></a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</a>		
+			{% endfor %}
+			<div class="clear"></div>
+		</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/graplearn/index.js" %}"></script>
+{% endblock scriptsOpt %}

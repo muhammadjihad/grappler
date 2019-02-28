@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/graplearn/createcourse.css" %}">
+{% endblock cssOpt %}
+
+{% block header %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h2>{{jumboTag}}</h2>
+			</div>
+		</div>
+	</div>
+{% endblock header %}
+
+{% block konten1 %}
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-sm-12">
+				<form method='POST'>
+					{% csrf_token %}
+					{{courseForm}}
+					<br>
+					<button type="submit" class='btn btn-outline-success'>Upload!</button>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/graplearn/createcourse.js" %}"></script>
+{% endblock scriptsOpt %}
