@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from collections import deque
 from akun.models import Dompet, MyCourse
 from django.core.files.storage import  FileSystemStorage
-# Create your views here.
+
 def index(request):
 
 	ListCourse = Course.objects.all()
