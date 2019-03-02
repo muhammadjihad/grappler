@@ -5,9 +5,12 @@ div.container.postbar div.container.uploadfoto{
 	padding:10px;
 	cursor: pointer;
 	border:1px solid white;
-	box-shadow: 0 0 2px black
+	box-shadow: 0 0 2px black;
 }
 
+div.container.postbar{
+	margin-top: 20px;
+}
 
 /* Profile */
 div.container div.profile{
@@ -226,4 +229,15 @@ div.container div.trendingpost div.status small{
 
 .komentarbox{
 	animation: inputShowUp 1s;
+}
+
+div.index div.container.postingan div.container.userprofilepost{
+	margin-bottom: -17px;
+}
+
+div.index div.container.postingan div.container.userprofilepost img{
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 1px solid white;
 }

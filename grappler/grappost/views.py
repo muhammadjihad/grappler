@@ -61,6 +61,7 @@ def createpost(request):
 					isi = request.POST.get('isi'),
 					file = request.POST.get('file')
 				)
+		return redirect("grappost:index")
 
 	return render(request,'grappost/createpost.html', context)
 

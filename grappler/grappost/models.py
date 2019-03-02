@@ -7,7 +7,7 @@ class Postingan(models.Model):
 	user = models.ForeignKey(User,on_delete=models.CASCADE)
 	judul = models.CharField(max_length=30)
 	isi = models.TextField()
-	file = models.FileField(upload_to='postingan/',blank=True)
+	file = models.FileField(upload_to='postingan/',blank=True, null=True)
 	published = models.DateTimeField(auto_now_add=True)
 	like = models.ManyToManyField(User, related_name='postliked')
 	share = models.ManyToManyField(User, related_name='postshared')

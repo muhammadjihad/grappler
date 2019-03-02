@@ -69,12 +69,27 @@
 				</div>
 					{% for post in allPost  %}
 						<div class="container postingan">
+							<div class="container userprofilepost text-center">
+								<div class="row">
+									<div class="col-sm-6">
+										<img src="{{post.user.profile.foto.url}}">
+									</div>
+									<div class="col-sm-6">
+										<h5>{{post.user.profile.nama}}</h5>
+									</div>	
+								</div>
+							</div>
+							<hr>
 							<h5>{{post.judul}}</h5>
 							<hr>
-							<div class="container isi">
-								<p>{{post.isi}}</p>
-								<img src="{{post.file.url}}" alt="">
-							</div>
+							{% if post.file.url %}
+								<div class="container isi">
+									<p>{{post.isi}}</p>
+									<img src="{{post.file.url}}" alt="">
+								</div>
+							{% else %}
+								<div class="contaniner"></div>
+							{% endif %}
 							<hr>
 							<div class="container status">
 								<div class="row">
