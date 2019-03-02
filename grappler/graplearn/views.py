@@ -200,8 +200,11 @@ def buy(request,id_course):
 	dompet, created = Dompet.objects.get_or_create(
 			user = request.user
 		)
+	print(request.user)
 	user =  User.objects.get(username = request.user.username)
 	userMineCourses = Course.objects.filter(user = user)
+	dompetUserCourse,created = Dompet.objects.get_or_create(user = courseTarget.user)
+	print(dompetUserCourse)
 	for userMineCourse in userMineCourses:
 		userCourses.courses.add(userMineCourse)
 
@@ -213,7 +216,9 @@ def buy(request,id_course):
 			userCourses.courses.add(courseTarget)
 			courseTarget.view += 1
 			dompet.uang -= coursePrice
+			dompetUserCourse.uang += coursePrice
 			courseTarget.save()
+			dompetUserCourse.save()
 			dompet.save()
 		else:
 			messages.error(request,'Kamu sudah punya Course ini :)')
