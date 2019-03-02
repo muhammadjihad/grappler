@@ -45,15 +45,15 @@
 						<div class="row">
 							<div class="col-sm-4">
 								<img src="{% static "img/post.png" %}" alt="">
-								<small>124 Posted</small>
+								<small>{{current_userPost.count}} Posted</small>
 							</div>
 							<div class="col-sm-4">
 								<img src="{% static "img/lovepost.png" %}" alt="">
-								<small>125 Liked</small>
+								<small>{{current_userLike}} Liked</small>
 							</div>
 							<div class="col-sm-4">
 								<img src="{% static "img/answer.png" %}" alt="">
-								<small>521 Answer</small>
+								<small>{{current_userComment}} Answer</small>
 							</div>
 						</div>
 					</div>

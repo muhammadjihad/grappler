@@ -16,8 +16,9 @@ class Postingan(models.Model):
 		return '{}-{}'.format(self.user, self.judul)
 
 class Komentar(models.Model):
-
-	postingan = models.ForeignKey(Postingan,on_delete=models.CASCADE)
+ 
+	postingan = models.ForeignKey(Postingan,on_delete=models.CASCADE, related_name='postingan')
+	user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='user')
 	isi = models.TextField()
 	like = models.ManyToManyField(User)
 

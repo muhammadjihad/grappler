@@ -10,6 +10,12 @@ from .models import Postingan, Komentar
 def index(request):
 
 	current_user = User.objects.get(id = request.user.id)
+	current_userPost = Postingan.objects.filter(user = current_user)
+	current_userLike = []
+	for post in current_userPost:
+		for like in post.like.all():
+			current_userLike.append(like)
+	current_userComment = Komentar.objects.filter(user = current_user)
 	profile = Profile.objects.get(user = current_user)
 	allPost = Postingan.objects.all()
 	allPost = allPost[::-1]
@@ -28,7 +34,10 @@ def index(request):
 		'jumboTag' : 'Ayo Sharing Ilmu Kamu!',
 		'profile' : profile,
 		'allPost' : allPost,
-		'trendingPostByLike' : trendingPostByLike
+		'trendingPostByLike' : trendingPostByLike,
+		'current_userPost' : current_userPost,
+		'current_userLike' : len(current_userLike),
+		'current_userComment' : len(current_userComment)
 	}
 
 	return render(request,'grappost/index.html', context)
