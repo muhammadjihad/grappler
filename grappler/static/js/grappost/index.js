@@ -46,24 +46,21 @@ const postingan = document.querySelectorAll('div.index div.postingan')
 
 const komentar = document.querySelectorAll('div.index div.postingan div.status img.komentar');
 
+// komentar.forEach(function(kom){
+// 	kom.addEventListener('click',function(e){
+// 		e.target.parentElement.parentElement.parentElement.appendChild(divbaru)
+// 	})
+// })
+
 komentar.forEach(function(kom){
 	kom.addEventListener('click',function(e){
-		e.target.parentElement.parentElement.parentElement.appendChild(divbaru)
+		e.target.parentElement.parentElement.parentElement.innerHTML = `
+			<div class="container komentarbox">
+				<form>
+					<input type="text" class="form-group form-control">
+					<button class="btn btn-primary">Post</button>
+				</form>
+			</div>
+		`
 	})
 })
-
-$.$.ajax({
-	url: 'http://www.google.apis.com',
-	type: 'get',
-	dataType: 'JSON',
-	data: {font: 'Montserrat'},
-})
-.done(function() {
-	console.log("success");
-})
-.fail(function() {
-	console.log("error");
-})
-.always(function() {
-	console.log("complete");
-});

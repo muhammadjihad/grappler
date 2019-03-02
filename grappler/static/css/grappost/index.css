@@ -213,3 +213,17 @@ div.container div.trendingpost div.status small{
 	}
 
 }
+
+@keyframes inputShowUp{
+	0%{
+		width:0% ;
+	}
+
+	100%{
+		width: 100%;
+	}
+}
+
+.komentarbox{
+	animation: inputShowUp 1s;
+}
