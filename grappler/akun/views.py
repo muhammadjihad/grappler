@@ -5,6 +5,7 @@ from .models import Profile, Proyek, Dompet, MyCourse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from graplearn.models import Course, VideoCourse
+from grappost.models import Postingan
 # Create your views here.
 
 def create(request):
@@ -55,6 +56,7 @@ def profile(request):
 	for course in userCourse:
 		users.append(course.user)
 	jumlahCourse = len(userCourse)
+	userPost = Postingan.objects.filter(user = current_user)
 
 	context = {
 		'judul' : 'Profile',
@@ -65,7 +67,8 @@ def profile(request):
 		'userPrestasi' : userPrestasi,
 		'userCoin' : userCoin,
 		'users' : users,
-		'myCourses' : myCourses
+		'myCourses' : myCourses,
+		'userPost' : userPost
 	}
 
 	if request.user.profile == userProfile:

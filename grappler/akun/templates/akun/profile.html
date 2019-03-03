@@ -134,7 +134,7 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div class="col-sm-8 usercourse">
+			<div class="col-sm-5 usercourse">
 				<div class="row text-center">
 					<div class="col-sm-12 text-center">
 						<div class="container coursesprofile">
@@ -221,6 +221,28 @@
 						{% endfor %}
 					</div>
 				</div>
+			</div>
+			<div class="col-sm-3 userposting">
+				<div class="container mt-4 headerpostingan"><h6>Postingan</h6></div>
+				{% for post in userPost  %}
+					<div class="container postingan">
+						<div class="container judulpostingan"><h6>{{post.judul}}</h6></div>
+						<hr>
+						<p>{{post.isi}}</p>
+						<div class="status">
+							<div class="row">
+								<div class="col-sm-6 lovepost">
+									<img src="{% static "img/lovepost.png" %}" alt="">
+									<small>214 Like</small>
+								</div>
+								<div class="col-sm-6 comment">
+									<img src="{% static "img/comment.png" %}" alt="">
+									<small>512 comment</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>

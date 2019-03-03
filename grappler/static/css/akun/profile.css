@@ -291,3 +291,22 @@ div.mycourses div.profile img{
 	width:150px;
 	margin:auto;
 }
+
+div.profileindex div.userposting div.headerpostingan{
+	background-color: white;
+	border:1px solid white;
+	box-shadow: 0 0 2px black
+}
+
+div.profileindex div.userposting div.postingan{
+	background-color:white;
+	margin-top:10px;
+	padding:10px;
+	border:1px solid white;
+	box-shadow: 0 0 2px black;
+}
+
+div.profileindex div.userposting img{
+	width:25px;
+	height: 25px;
+}
