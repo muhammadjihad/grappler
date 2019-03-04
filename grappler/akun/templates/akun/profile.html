@@ -223,7 +223,10 @@
 				</div>
 			</div>
 			<div class="col-sm-3 userposting">
-				<div class="container mt-4 headerpostingan"><h6>Postingan</h6></div>
+				<div class="container mt-4 headerpostingan mb-2">
+							<h6>Postingan</h6>
+				</div>
+				<a href="{% url "grappost:createpost" %}" class="mt-4"><button class="btn-sm btn-success">Buat Post +</button></a>
 				{% for post in userPost  %}
 					<div class="container postingan">
 						<div class="container judulpostingan"><h6>{{post.judul}}</h6></div>
@@ -233,11 +236,11 @@
 							<div class="row">
 								<div class="col-sm-6 lovepost">
 									<img src="{% static "img/lovepost.png" %}" alt="">
-									<small>214 Like</small>
+									<small>{{post.like.all.count}} Like</small>
 								</div>
 								<div class="col-sm-6 comment">
 									<img src="{% static "img/comment.png" %}" alt="">
-									<small>512 comment</small>
+									<small>{{post.comment.all.count}} comment</small>
 								</div>
 							</div>
 						</div>
