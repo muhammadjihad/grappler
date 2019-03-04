@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/grappost/index.css" %}">
+{% endblock cssOpt %}
+
+{% block header %}
+
+<div class="container postbar">
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Mau berbagi apa hari ini?" aria-label="Recipient's username" aria-describedby="basic-addon2">
+	  <input type="text" class="form-control" placeholder="Coba Ceritakan di sini :)" aria-label="Recipient's username" aria-describedby="basic-addon2">
+	  <div class="input-group-append">
+	    <button class="btn btn-warning" type="button">Upload File</button>
+	    <button class="btn btn-primary" type="button">Posting</button>
+	  </div>
+	</div>
+</div>
+{% endblock header %}
+
+{% block konten1 %}
+	<div class="container">
+		<div class="row">
+			{# profile #}
+			<div class="col-sm-3 profile">
+				<div class="container">
+					<h5>Profile</h5>
+					<hr>
+					<div class="container bio">
+						<div class="row">
+							<div class="col-sm-6">
+								<img src="{{profile.foto.url}}" alt="">
+							</div>
+							<div class="col-sm-6">
+								<h6>{{profile.nama}}</h6>
+								<div class="profilecontainer text-white">
+									<p>{{profile.get_user_level_display}}</p>
+								</div>
+								<hr>
+							</div>
+						</div>
+					</div>
+					<div class="container profilestatus">
+						<div class="row">
+							<div class="col-sm-4">
+								<img src="{% static "img/post.png" %}" alt="">
+								<small>{{current_userPost.count}} Posted</small>
+							</div>
+							<div class="col-sm-4">
+								<img src="{% static "img/lovepost.png" %}" alt="">
+								<small>{{current_userLike}} Liked</small>
+							</div>
+							<div class="col-sm-4">
+								<img src="{% static "img/answer.png" %}" alt="">
+								<small>{{current_userComment}} Answer</small>
+							</div>
+						</div>
+					</div>
+					<div class="container">
+						<a href="{% url "grappost:createpost" %}"><button class="btn-sm btn-primary">Buat Postingan +</button></a>
+					</div>
+				</div>
+			</div>
+			{# home #}
+			<div class="col-sm-6 index">
+				<div class="container indexjudul" id="indexjudul">
+					<h5>What's Happening?</h5>
+				</div>
+					{% for post in allPost  %}
+						<div class="container postingan">
+							<div class="container userprofilepost text-center">
+								<div class="row">
+									<div class="col-sm-6">
+										<img src="{{post.user.profile.foto.url}}">
+									</div>
+									<div class="col-sm-6">
+										<h5>{{post.user.profile.nama}}</h5>
+									</div>	
+								</div>
+							</div>
+							<hr>
+							<h5>{{post.judul}}</h5>
+							<hr>
+							{% if post.file.url %}
+								<div class="container isi">
+									<p>{{post.isi}}</p>
+									<img src="{{post.file.url}}" alt="">
+								</div>
+							{% else %}
+								<div class="contaniner"></div>
+							{% endif %}
+							<hr>
+							<div class="container status">
+								<div class="row">
+									<div class="col-sm-4">
+										<a href="{% url "grappost:like" post.id %}"><img src="{% static "img/lovepost.png" %}" alt=""></a>
+										<small>{{post.like.all.count}}</small>
+									</div>
+									<div class="col-sm-4">
+										<img src="{% static "img/share.png" %}" alt="">
+										<small>{{post.share.all.count}}</small>
+									</div>
+									<div class="col-sm-4">
+										<img src="{% static "img/comment.png" %}" alt="" class="komentar">
+										<small>{{post.like.all.count}}</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+			</div>
+			{# trending #}
+			<div class="col-sm-3 trending">
+				<div class="container">
+					{% for trendingpost in trendingPostByLike  %}
+						<div class="container trendingpost">
+							<h5>{{trendingpost.judul}}</h5>
+							<img src="{% static "img/trending.png" %}" alt="">
+							<small>trending</small>
+							<hr>
+							<div class="container isi">
+								<p>{{trendingpost.isi}}</p>
+							</div>
+							<hr>
+							<div class="container status">
+								<div class="row">
+									<div class="col-sm-4">
+										<img src="{% static "img/lovepost.png" %}" alt="">
+										<small>{{trendingpost.like.all.count}}</small>
+									</div>
+									<div class="col-sm-4">
+										<img src="{% static "img/share.png" %}" alt="">
+										<small>{{trendingpost.share.all.count}}</small>
+									</div>
+									<div class="col-sm-4">
+										<img src="{% static "img/comment.png" %}" alt="">
+										<small>{{trendingpost.like.all.count}}</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/grappost/index.js" %}"></script>
+{% endblock scriptsOpt %}

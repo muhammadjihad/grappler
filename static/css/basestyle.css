@@ -1,0 +1,33 @@
+body{
+	background-color: #EBECEC;
+}
+
+nav img{
+	width:100px;
+}
+
+nav div#navbarNav ul li a{
+	color:white;
+}
+
+nav div.container{
+	position: relative;
+}
+
+nav div.form{
+	height:50px;
+	width:100%;
+	margin: auto;
+}
+
+nav input{
+	float:left;
+	margin-top: 10px;
+	size:5;
+	display: inline-block;
+}
+
+nav div.form button{
+	display: inline-block;
+	float: left;
+}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/graplearn/detailcourse.css" %}">
+{% endblock cssOpt %}
+
+{% block konten1 %}
+	<div class="container">
+		<div class="row">
+			{# Kolom Untuk Profile #}
+			<div class="col-sm-4" id='profilesection'>
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 mt-2 text-center">
+							<h2>Profile</h2>
+						</div>
+					</div>
+					<hr>
+					<div class="container userprofile text-center">
+						<img src="{{detailCourse.user.profile.foto.url}}" alt="">
+						<h4><a href="{% url "akun:otherprofile" detailCourse.user.id %}">{{detailCourse.user.profile.nama}}</a></h4>
+						<div class="boxlevel">
+							<small>{{detailCourse.user.profile.get_user_level_display}}</small>
+						</div>
+						<hr>
+						<p>{{detailCourse.user.profile.bio}}</p>
+					</div>
+				</div>
+				<div class="container coursedemo">
+					<div class="videodemo">
+						<h6>Course Preview</h6>
+						{% if demovid %}
+							<video src="{{demovid.video.url}}" oncontextmenu="return false" controls=""></video>
+						{% else %}
+							<div class="container videoempty">
+								<h6>Ga ada rangkuman Course, Mungkin video ini spesial :)</h6>
+								<img src="{% static "img/empty.png" %}" alt="">
+							</div>
+						{% endif %}
+					</div>
+					<div class="container judul mt-3"><h6>Apa aja yang akan dipelajari</h6></div>
+					<div class="container">
+						<ul class="list-group">
+						{% for video in videoDescript  %}
+						  <li class="list-group-item">{{video}}</li>	
+						{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-1">
+				<div class="container bordercontainer"></div>
+			</div>
+
+			{# Kolom untuk Course Detail #}
+			<div class="col-sm-7" id='coursesection'>
+				<div class="detailcourse">
+					<h1>{{detailCourse.judul}}</h1>
+					<hr>
+					<img src="{{detailCourse.thumbnail.url}}" alt="">
+				</div>
+				<hr>
+				<div class="coursestatus">
+					<div class="row">
+						<div class="col-sm-4">
+							<img src="{% static "img/view.png" %}" alt="">
+							<h5>{{detailCourse.view}}</h5>
+							<small>Viewed</small>
+						</div>
+						<div class="col-sm-4">
+							<img src="{% static "img/like.png" %}" alt="">
+							<h5>{{detailCourse.like}}</h5>
+							<small>Liked</small>
+						</div>
+						<div class="col-sm-4">
+							<img src="{% static "img/share.png" %}" alt="">
+							<h5>{{detailCourse.share}}</h5>
+							<small>Shared</small>
+						</div>
+					</div>
+					<hr>
+					<p>{{detailCourse.deskripsi}}</p>
+					<p>Diterbitkan : {{detailCourse.published}}</p>
+					{% if authUser %}
+						<a href="{% url "graplearn:addvideocourse" detailCourse.id %}"><button class="btn btn-primary">+ Video</button></a>
+						<a href="{% url "graplearn:updatecourse" detailCourse.id %}"><button class="btn btn-warning">Update</button></a>
+					{% endif %}
+					<hr>
+					<div class="row">
+						<div class="col-sm-6">
+							<small>Kategori</small>
+							<h5>{{detailCourse.kategori}}</h5>
+						</div>
+						<div class="col-sm-6">
+							<a href="{% url "graplearn:buycourse" detailCourse.id %}">
+								<div class="harga">
+									<img src="{% static "img/coin.png" %}" alt="">
+									{% if not detailCourse in userCourses %}
+										<h5>{{detailCourse.harga}}</h5>
+									{% else %}
+										<h5>kamu sudah membeli course ini</h5>
+									{% endif %}
+									<div class="clear"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container videocourses">
+		{% for video in videoCourses  %}
+		<div class="container video">
+			<h4>{{video.judul}}</h4>
+			<video src="{{video.video.url}}" controls="true" oncontextmenu="return false"></video>
+			<div class="deskripsi">
+				<h6>Deskripsi</h6>
+				<p>{{video.deskripsi}}</p>
+				<hr>
+				<h6>Referensi</h6>
+				<p>{{video.referensi}}</p>
+				<div class="comment">
+					<img src="{% static "img/comment.png" %}" alt="">
+					<small>245 comments</small>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/graplearn/detailcourse.js" %}"></script>
+{% endblock scriptsOpt %}
