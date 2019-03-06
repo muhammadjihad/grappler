@@ -21,9 +21,9 @@ def create(request):
 	if request.method == 'POST':
 		userForm = UserForm(request.POST)
 		if userForm.is_valid():
+			userForm.save()
 			username = userForm.cleaned_data.get('username')
 			nama = userForm.cleaned_data.get('first_name')
-			userForm.save()
 			user = User.objects.get(username = username)
 			Profile.objects.create(
 					user = user,
