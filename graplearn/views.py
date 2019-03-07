@@ -35,7 +35,6 @@ def createCourse(request):
 
 	if request.method == 'POST':
 		courseForm = CourseForm(request.POST, request.FILES)
-		course_img = request.FILES['thumbnail']
 		if courseForm.is_valid():
 			user = request.user
 			judul = courseForm.cleaned_data.get('judul')
