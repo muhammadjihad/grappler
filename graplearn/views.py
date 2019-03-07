@@ -48,7 +48,7 @@ def createCourse(request):
 					kategori = kategori,
 					deskripsi = deskripsi,
 					harga = harga,
-					thumbnail = course_img,
+					thumbnail = thumbnail,
 				)
 			return redirect ('graplearn:index')
 
