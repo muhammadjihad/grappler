@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('graplearn/api/',include('graplearn.api.urls', namespace='graplearn-api')),
     path('grappost/',include('grappost.urls',namespace='grappost')),
     path('graplearn/',include('graplearn.urls', namespace='graplearn')),
     path('akun/',include('akun.urls', namespace='akun')),

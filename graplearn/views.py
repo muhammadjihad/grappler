@@ -252,3 +252,9 @@ def commentVideo(request,id_comment):
 			return redirect('../../detail/{}'.format(video.course.id))
 
 	return render(request,'graplearn/commentvideo.html', context)
+
+def cobaDetail(request,id_input):
+	context = {
+		'detail' : Course.getDetailCourse(id_input)
+	}
+	return render(request,'graplearn/oke.html',context)

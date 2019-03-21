@@ -19,6 +19,14 @@ class Course(models.Model):
 	def __str__(self):
 		return '{}-{}'.format(self.user, self.judul)
 
+	@classmethod
+	def getDetailCourse(cls,id):
+		return cls.objects.get(id = id)
+		
+	@classmethod
+	def getAllCourse(cls):
+		return cls.objects.all()
+
 class VideoCourse(models.Model):
 
 	course = models.ForeignKey(Course, on_delete=models.CASCADE,blank=True)

@@ -9,6 +9,7 @@ urlpatterns=[
 	path('usercourses/',views.userCourses, name='usercourses'),
 	path('createcourse/', views.createCourse, name='createcourse'),
 	path('', views.index, name = 'index'),
+	re_path(r'^coba/(?P<id_input>[0-9]+)/$',views.cobaDetail,name='cobadetail'),
 	re_path(r'^update/(?P<id_update>[0-9]+)/$',views.updateCourse, name='updatecourse'),
 	re_path(r'^detail/(?P<id_detail>[0-9]+)/$',views.detailCourse, name='detailcourse'),
 	re_path(r'^buy/(?P<id_course>[0-9]+)/$',views.buy, name='buycourse'),
