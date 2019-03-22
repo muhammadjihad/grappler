@@ -56,12 +56,9 @@ def createpost(request):
 	if request.method == 'POST':
 		postinganForm = PostinganForm(request.POST,request.FILES)
 		if postinganForm.is_valid():
-			Postingan.objects.create(
-					user = request.user,
-					judul = postinganForm.cleaned_data.get('judul'),
-					isi = postinganForm.cleaned_data.get('isi'),
-					file = request.FILES['file']
-				)
+			new_post = postinganForm.save(commit=False)
+			new_post.user = request.user
+			new_post.save()
 			return redirect('grappost:index')
 
 	return render(request,'grappost/createpost.html', context)
@@ -73,9 +70,9 @@ def like(request,id_like):
 	if not request.user in userLiked:
 		post.like.add(request.user)
 		post.save()
-	else:
-		return redirect('grappost:index')
-
+	elif request.user in userLiked:
+		post.like.remove(request.user)
+		post.save()
 	return redirect('grappost:index')
 
 def comment(request,id_comment):
