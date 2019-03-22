@@ -2,7 +2,7 @@
 
 {% block konten1 %}
 	<div class="container">
-		<form method="POST">
+		<form method="POST" enctype="multipart/form-data">
 			{% csrf_token %}
 			{{postForm}}
 			<br>
@@ -10,3 +10,12 @@
 		</form>
 	</div>
 {% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script>
+		$(document).ready(function(){
+			$('#id_file').attr('enctype','multipart/form-data')
+			console.log(document.getElementById('id_file'))
+		});
+	</script>
+{% endblock scriptsOpt %}

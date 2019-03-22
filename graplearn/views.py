@@ -41,7 +41,7 @@ def createCourse(request):
 			kategori = courseForm.cleaned_data.get('kategori')
 			deskripsi = courseForm.cleaned_data.get('deskripsi')
 			harga = courseForm.cleaned_data.get('harga')
-			thumbnail = request.POST['thumbnail']
+			thumbnail = request.FILES['thumbnail']
 			Course.objects.create(
 					user = user,
 					judul = judul,

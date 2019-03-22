@@ -44,7 +44,7 @@ def index(request):
 
 def createpost(request):
 
-	postinganForm = PostinganForm
+	postinganForm = PostinganForm(request.POST or None,request.FILES or None)
 
 	context = {
 		'judul' : 'Mau berbagi apa hari ini?',
@@ -54,14 +54,15 @@ def createpost(request):
 	}
 
 	if request.method == 'POST':
-		postinganForm = PostinganForm(request.POST)
-		Postingan.objects.create(
+		postinganForm = PostinganForm(request.POST,request.FILES)
+		if postinganForm.is_valid():
+			Postingan.objects.create(
 					user = request.user,
-					judul = request.POST.get('judul'),
-					isi = request.POST.get('isi'),
-					file = request.POST.get('file')
+					judul = postinganForm.cleaned_data.get('judul'),
+					isi = postinganForm.cleaned_data.get('isi'),
+					file = request.FILES['file']
 				)
-		return redirect("grappost:index")
+			return redirect('grappost:index')
 
 	return render(request,'grappost/createpost.html', context)
 
