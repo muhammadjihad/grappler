@@ -28,8 +28,17 @@
 				<form method="POST">
 					{% csrf_token %}
 				<div class="row">
-					<div class="col-sm-10">
-						<input name="judulinput" type="text" class='form-group form-control' placeholder="Cari Berdasarkan Judul">
+					<div class="col-sm-5">
+			           <select name="filter" id="coursefilter" class="form-group form-control">
+			           	<option value="">Filter berdasarkan?</option>
+			           	<option value="judul">Judul</option>
+						<option value="user_level">User Level</option>
+						<option value="kategori">Kategori</option>
+						<option value="published">Waktu Terbit</option>
+			           </select>
+					</div>
+					<div class="col-sm-5">
+						<input name="judulinput" type="text" class='form-group form-control' placeholder="Filter">
 					</div>
 					<div class="col-sm-2">
 						<button type="submit" class="btn btn-primary">Cari!</button>
@@ -122,7 +131,6 @@
 {% block scriptsOpt %}
 	<script src="{% static "js/graplearn/index.js" %}"></script>
 	<script>
-			console.log($('.ajaxcall'))
 			$('.ajaxcall').click(function(){
 				$.ajax({
 					method:'GET',
@@ -133,5 +141,10 @@
 					}
 				});
 			});
+
+		    $("select#coursefilter").change(function(){
+		        var selected_filter = $(this).children("option:selected").val();
+		        $('input[name=judulinput]').attr('placeholder','Masukkan filter berdasarkan '+selected_filter)
+		    });
 	</script>
 {% endblock scriptsOpt %}

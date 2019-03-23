@@ -11,8 +11,8 @@ from django.core.paginator import Paginator
 
 def index(request):
 
-	ListCourse = Course.objects.all()
-	ListCourse = ListCourse[::-1]
+	ListCourse = Course.getAllCourseByLevel()
+	# ListCourse = ListCourse[::-1]
 	ListCourse = Paginator(ListCourse,12)
 
 	page = request.GET.get('page')
@@ -24,13 +24,34 @@ def index(request):
 	}
 
 	if request.method == 'POST':
-		return redirect(reverse("graplearn:filtercourse",kwargs={"judul_input":request.POST['judulinput']}))
+		filter_input = request.POST['filter']
+		judul_input = request.POST['judulinput']
+		if judul_input == '':
+			judul_input = 'time'
+		if filter_input == '':
+			filter_input = 'time'
+		return redirect(reverse("graplearn:filtercourse",
+			kwargs={
+			"filter_input":filter_input,
+			"judul_input":judul_input
+			}))
 
 	return render(request,'graplearn/index.html', context)
 
-def index_filter(request,judul_input):
+def index_filter(request,filter_input,judul_input):
 
-	ListCourse = Course.objects.filter(judul__contains=judul_input)
+	ListCourse = None
+
+	if filter_input == "judul":
+		ListCourse = Course.objects.filter(judul__contains=judul_input)
+	elif filter_input == "user_level":
+		ListCourse = Course.filterCourseByLevel(judul_input)
+	elif filter_input == "kategori":
+		ListCourse = Course.objects.filter(kategori__contains=judul_input)
+	elif filter_input == "published":
+		ListCourse = Course.objects.all().order_by("-id")
+	else:
+		return redirect("graplearn:index")
 
 	context = {
 		'judul' : 'graplearn | Learn Everything',
@@ -40,7 +61,17 @@ def index_filter(request,judul_input):
 	}
 
 	if request.method == 'POST':
-		return redirect(reverse("graplearn:filtercourse",kwargs={"judul_input":request.POST['judulinput']}))
+		filter_input = request.POST['filter']
+		judul_input = request.POST['judulinput']
+		if judul_input == '':
+			judul_input = 'time'
+		if filter_input == '':
+			filter_input = 'time'
+		return redirect(reverse("graplearn:filtercourse",
+			kwargs={
+			"filter_input":filter_input,
+			"judul_input":judul_input
+			}))
 
 	return render(request,'graplearn/index.html', context)
 
@@ -63,7 +94,7 @@ def createCourse(request):
 			new_course.user = request.user
 			new_course.save()
 			userProfile = Profile.objects.get(user = request.user)
-			userProfile.gainExp(150)
+			userProfile.gainExp(35)
 			return redirect ('graplearn:index')
 
 	return render(request, 'graplearn/create.html', context)

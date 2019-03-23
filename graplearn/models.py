@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from operator import itemgetter
 # Create your models here.
 
 
@@ -26,6 +27,28 @@ class Course(models.Model):
 	@classmethod
 	def getAllCourse(cls):
 		return cls.objects.all()
+
+	@classmethod
+	def getAllCourseByLevel(cls):
+		courses = cls.objects.all()
+		list_courses = []
+		for course in courses:
+			list_courses.append((int(course.user.profile.user_level),course.id))
+		list_courses = sorted(list_courses, reverse=True)
+		ready_course = []
+		for course in list_courses:
+			ready_course.append(cls.objects.get(id = course[1]))
+		return ready_course
+
+	@classmethod
+	def filterCourseByLevel(cls, filter):
+		courses = cls.objects.all()
+		list_courses = []
+		for course in courses:
+			if course.user.profile.get_user_level_display() == filter.capitalize():
+				list_courses.append(course)
+		return list_courses
+
 
 class VideoCourse(models.Model):
 

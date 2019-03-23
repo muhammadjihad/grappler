@@ -59,6 +59,8 @@ def createpost(request):
 			new_post = postinganForm.save(commit=False)
 			new_post.user = request.user
 			new_post.save()
+			userProfile = Profile.objects.get(user = request.user)
+			userProfile.gainExp(5)
 			return redirect('grappost:index')
 
 	return render(request,'grappost/createpost.html', context)
@@ -70,9 +72,13 @@ def like(request,id_like):
 	if not request.user in userLiked:
 		post.like.add(request.user)
 		post.save()
+		userProfile = post.user.profile
+		userProfile.gainExp(10)
 	elif request.user in userLiked:
 		post.like.remove(request.user)
 		post.save()
+		userProfile = post.user.profile
+		userProfile.un_gainExp(10)
 	return redirect('grappost:index')
 
 def comment(request,id_comment):

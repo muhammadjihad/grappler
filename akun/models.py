@@ -60,6 +60,13 @@ class Profile(models.Model):
 		self.user_exp += input_exp
 		self.leveling()
 		self.save()
+	def un_gainExp(self, input_exp):
+		self.user_exp -= input_exp
+		self.leveling()
+		self.save()
+	class Meta:
+		ordering = ["user_level"]
+
 
 class Proyek(models.Model):
 
