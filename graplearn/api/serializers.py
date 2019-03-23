@@ -16,3 +16,18 @@ class ListCourseSerializer(serializers.ModelSerializer):
 				'like',
 				'view'
 			)
+
+class DetailCourseSerializer(serializers.ModelSerializer):
+	user = UserSerializer()
+	class Meta:
+		model = Course
+		fields=(
+				'user',
+				'judul',
+				'kategori',
+				'deskripsi',
+				'harga',
+				'published',
+				'like',
+				'view',
+			)

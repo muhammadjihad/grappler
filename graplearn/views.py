@@ -36,20 +36,9 @@ def createCourse(request):
 	if request.method == 'POST':
 		courseForm = CourseForm(request.POST, request.FILES)
 		if courseForm.is_valid():
-			user = request.user
-			judul = courseForm.cleaned_data.get('judul')
-			kategori = courseForm.cleaned_data.get('kategori')
-			deskripsi = courseForm.cleaned_data.get('deskripsi')
-			harga = courseForm.cleaned_data.get('harga')
-			thumbnail = request.FILES['thumbnail']
-			Course.objects.create(
-					user = user,
-					judul = judul,
-					kategori = kategori,
-					deskripsi = deskripsi,
-					harga = harga,
-					thumbnail = thumbnail,
-				)
+			new_course = courseForm.save(commit=False)
+			new_course.user = request.user
+			new_course.save()
 			return redirect ('graplearn:index')
 
 	return render(request, 'graplearn/create.html', context)
@@ -115,12 +104,6 @@ def detailCourse(request, id_detail):
 		videoComment.append(VideoComment.objects.filter(videoCourse_id = video.id))
 	print(videoComment)
 	zipList = zip(videoCourses,videoComment)
-	print(zipList)
-	# i = 0
-	# video_comment = []
-	# while i < len(videoCourses):
-	# 	video_comment.append((videoCourses[i],videoComment[i]))
-	# 	i += 1
 	demovid = None
 	videoDescript = []
 	for desc in videoCourses:
