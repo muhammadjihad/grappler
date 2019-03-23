@@ -6,9 +6,9 @@ from django.conf.urls.static import static
 
 app_name = 'graplearn'
 urlpatterns=[
-	path('usercourses/',views.userCourses, name='usercourses'),
 	path('createcourse/', views.createCourse, name='createcourse'),
 	path('', views.index, name = 'index'),
+	re_path(r'^filter/(?P<judul_input>.+)/$',views.index_filter,name ='filtercourse'),
 	re_path(r'^coba/(?P<id_input>[0-9]+)/$',views.cobaDetail,name='cobadetail'),
 	re_path(r'^update/(?P<id_update>[0-9]+)/$',views.updateCourse, name='updatecourse'),
 	re_path(r'^detail/(?P<id_detail>[0-9]+)/$',views.detailCourse, name='detailcourse'),

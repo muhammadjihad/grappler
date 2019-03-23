@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .models import Course, VideoCourse, VideoComment
 from .forms import CourseForm, VideoCourseForm, VideoCommentForm
 from django.contrib.auth.decorators import login_required
@@ -7,17 +7,41 @@ from django.contrib.auth.models import User
 from collections import deque
 from akun.models import Dompet, MyCourse
 from django.core.files.storage import  FileSystemStorage
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 def index(request):
 
 	ListCourse = Course.objects.all()
 	ListCourse = ListCourse[::-1]
+	ListCourse = Paginator(ListCourse,12)
 
+	page = request.GET.get('page')
+	ListCourse = ListCourse.get_page(page)
 	context = {
 		'judul' : 'graplearn | Learn Everything',
 		'jumboTag' : 'Pilih Kursus yang kamu suka!',
 		'ListCourse' : ListCourse,
 	}
+
+	if request.method == 'POST':
+		return redirect(reverse("graplearn:filtercourse",kwargs={"judul_input":request.POST['judulinput']}))
+
+	return render(request,'graplearn/index.html', context)
+
+def index_filter(request,judul_input):
+
+	ListCourse = Course.objects.filter(judul__contains=judul_input)
+
+	context = {
+		'judul' : 'graplearn | Learn Everything',
+		'jumboTag' : 'Pilih Kursus yang kamu suka!',
+		'ListCourse' : ListCourse,
+		'all' : 'all',
+	}
+
+	if request.method == 'POST':
+		return redirect(reverse("graplearn:filtercourse",kwargs={"judul_input":request.POST['judulinput']}))
 
 	return render(request,'graplearn/index.html', context)
 
@@ -77,15 +101,6 @@ def updateCourse(request, id_update):
 
 	return render(request,'graplearn/update.html', context)
 
-@login_required
-def userCourses(request):
-	userCourses = Course.objects.filter(user = request.user)
-	context = {
-		'judul' : 'Update Form',
-		'jumboTag' : 'Update Form',
-		'selfCourses' : userCourses,
-	}
-	return render(request,'graplearn/usercourses.html', context)
 
 @login_required
 def detailCourse(request, id_detail):

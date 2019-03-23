@@ -152,3 +152,10 @@ small{
 .clear{
 	clear: both;
 }
+
+div.pagination{
+	margin: auto;
+	background-color: #1264AE;
+	padding: 5px;
+	color:white;
+}

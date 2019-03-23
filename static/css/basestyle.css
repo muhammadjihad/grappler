@@ -31,3 +31,7 @@ nav div.form button{
 	display: inline-block;
 	float: left;
 }
+
+.pagination{
+	margin: auto;
+}
