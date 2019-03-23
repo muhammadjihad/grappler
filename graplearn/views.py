@@ -5,10 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from collections import deque
-from akun.models import Dompet, MyCourse
+from akun.models import Dompet, MyCourse, Profile
 from django.core.files.storage import  FileSystemStorage
 from django.core.paginator import Paginator
-from django.shortcuts import render
 
 def index(request):
 
@@ -63,6 +62,8 @@ def createCourse(request):
 			new_course = courseForm.save(commit=False)
 			new_course.user = request.user
 			new_course.save()
+			userProfile = Profile.objects.get(user = request.user)
+			userProfile.gainExp(150)
 			return redirect ('graplearn:index')
 
 	return render(request, 'graplearn/create.html', context)

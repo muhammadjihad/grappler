@@ -30,9 +30,36 @@ class Profile(models.Model):
 			('6','Legend'),
 		)
 	user_level		= models.CharField(max_length=1,choices=PILIHAN_LEVEL,default='1')
+	user_exp = models.PositiveIntegerField(default=0)
 
 	def __str__(self):
 		return '{}'.format(self.nama)
+
+
+	def leveling(self):
+		if self.user_exp < 100:
+			self.user_level = '1'
+			self.save()
+		elif self.user_exp < 1000:
+			self.user_level = '2'
+			self.save()
+		elif self.user_exp < 10000:
+			self.user_level = '3'
+			self.save()
+		elif self.user_exp < 10000:
+			self.user_level = '4'
+			self.save()
+		elif self.user_exp < 100000:
+			self.user_level = '5'
+			self.save()
+		else:
+			self.user_level = '6'
+			self.save()
+
+	def gainExp(self, input_exp):
+		self.user_exp += input_exp
+		self.leveling()
+		self.save()
 
 class Proyek(models.Model):
 

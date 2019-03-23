@@ -100,6 +100,7 @@
 			{% endfor %}
 			<div class="clear"></div>
 		</div>
+		{% if not all %}
 		<div class="pagination">
 			<span class="step-links">
 				{% if ListCourse.has_previous %}
@@ -115,6 +116,7 @@
 				{% endif %}
 			</span>
 		</div>
+		{% endif %}
 {% endblock konten1 %}
 
 {% block scriptsOpt %}
