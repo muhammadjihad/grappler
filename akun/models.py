@@ -37,8 +37,8 @@ class Profile(models.Model):
 
 
 	def leveling(self):
-		if self.user.exp < 0:
-			self.user.exp = 0
+		if self.user_exp < 0:
+			self.user_exp = 0
 		elif self.user_exp < 100:
 			self.user_level = '1'
 			self.save()

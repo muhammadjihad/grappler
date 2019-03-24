@@ -18,6 +18,7 @@ from django.urls import path,include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
 
 urlpatterns = [
     path('graplearn/api/',include('graplearn.api.urls', namespace='graplearn-api')),
@@ -25,5 +26,8 @@ urlpatterns = [
     path('graplearn/',include('graplearn.urls', namespace='graplearn')),
     path('akun/',include('akun.urls', namespace='akun')),
     path('',views.index, name='home'),
-    path('admin/', admin.site.urls),
+    path('teruslahberjuang/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "grappler Inc. | Find Anything Learn Everything"
+admin.site.site_title = "grappler Inc. | Find Anything Learn Everything"

@@ -52,8 +52,8 @@ class Course(models.Model):
 
 class CourseStatus(models.Model):
 	course = models.OneToOneField(Course, on_delete=models.CASCADE)
-	like = models.ManyToManyField(User, blank=True,null=True, related_name='like')
-	view = models.ManyToManyField(User, blank=True,null=True, related_name='view')
+	like = models.ManyToManyField(User, blank=True, related_name='like')
+	view = models.ManyToManyField(User, blank=True, related_name='view')
 
 	def __str__(self):
 		return self.course.judul

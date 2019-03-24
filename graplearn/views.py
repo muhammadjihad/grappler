@@ -47,6 +47,15 @@ def index(request):
 def index_filter(request,filter_input,judul_input):
 
 	ListCourse = None
+	course_status = []
+
+	def arrangement():
+		for course in ListCourse:
+			each_course = CourseStatus.objects.get_or_create(course=course)
+			user_liked_course = each_course[0].like.all()
+			course_status.append(
+				(user_liked_course,course)
+				)
 
 	if filter_input == "judul":
 		ListCourse = Course.objects.filter(judul__contains=judul_input)
@@ -58,11 +67,12 @@ def index_filter(request,filter_input,judul_input):
 		ListCourse = Course.objects.all().order_by("-id")
 	else:
 		return redirect("graplearn:index")
+	arrangement()
 
 	context = {
 		'judul' : 'graplearn | Learn Everything',
 		'jumboTag' : 'Pilih Kursus yang kamu suka!',
-		'ListCourse' : ListCourse,
+		'ListCourse' : course_status,
 		'all' : 'all',
 	}
 
@@ -101,9 +111,12 @@ def createCourse(request):
 			new_course = courseForm.save(commit=False)
 			new_course.user = request.user
 			new_course.save()
-			userCourses.courses.add(new_course)
 			userProfile = Profile.objects.get(user = request.user)
 			userProfile.gainExp(35)
+			CourseStatus.objects.create(
+					course = new_course
+				)
+			userCourses.courses.add(new_course)
 			return redirect ('graplearn:index')
 
 	return render(request, 'graplearn/create.html', context)

@@ -71,7 +71,7 @@
 								</div>
 								<div class="col-sm-4">
 									<img src="{% static "img/like.png" %}" alt="">
-									<small>{{course.like}}</small>
+									<small class="likecount">{{list_like.count}}</small>
 								</div>
 								<div class="col-sm-4">
 									<img src="{% static "img/share.png" %}" alt="">
@@ -103,11 +103,10 @@
 							</div>
 						{% endif %}
 					</div>
-					<button class="btn btn-success ajaxcall" url='{% url "graplearn-api:detailcourse" course.id %}'>klik</button>
 					{% if user in list_like %}
-					<a href="{% url "graplearn:coursestatus" "like" course.id %}"><button class="btn btn-danger">Unlike</button></a>
+					<button class="btn btn-danger liketoggle" url="{% url "graplearn:coursestatus" "like" course.id %}">Unlike</button>
 					{% else %}
-					<a href="{% url "graplearn:coursestatus" "like" course.id %}"><button class="btn btn-success">Like</button></a>
+					<button class="btn btn-success liketoggle" url="{% url "graplearn:coursestatus" "like" course.id %}">Like</button>
 					{% endif %}
 				</div>
 			</a>		
@@ -136,20 +135,31 @@
 {% block scriptsOpt %}
 	<script src="{% static "js/graplearn/index.js" %}"></script>
 	<script>
-			$('.ajaxcall').click(function(){
-				$.ajax({
-					method:'GET',
-					url:$(this).attr('url'),
-					data:'',
-					success:function(data){
-						console.log(data)
+			$(document).ready(function(){
+				$(".liketoggle").on("click",function(){
+					$.ajax({
+						method:"GET",
+						url:$(this).attr("url"),
+						data:{},
+						success:function(){
+							console.log('berhasil diambil')
+						}
+					});
+					if($(this).text() == 'Like'){
+						$(this).text("Unlike")
+						$(this).removeClass('btn-success')
+						$(this).addClass('btn-danger')
+					} else if($(this).text() == 'Unlike'){
+						$(this).text("Like")
+						$(this).removeClass('btn-danger')
+						$(this).addClass('btn-success')
 					}
 				});
-			});
 
-		    $("select#coursefilter").change(function(){
-		        var selected_filter = $(this).children("option:selected").val();
-		        $('input[name=judulinput]').attr('placeholder','Masukkan filter berdasarkan '+selected_filter)
-		    });
+			    $("select#coursefilter").change(function(){
+			        var selected_filter = $(this).children("option:selected").val();
+			        $('input[name=judulinput]').attr('placeholder','Masukkan filter berdasarkan '+selected_filter)
+			    });				
+			});
 	</script>
 {% endblock scriptsOpt %}
