@@ -16,4 +16,5 @@ urlpatterns=[
 	re_path(r'^buy/(?P<id_course>[0-9]+)/$',views.buy, name='buycourse'),
 	re_path(r'^addvideocourse/(?P<id_course>[0-9]+)/$',views.addVideoCourse, name='addvideocourse'),
 	re_path(r'^videocomment/(?P<id_comment>[0-9]+)/$',views.commentVideo,name='commentvideo'),
+	re_path(r'^coursestatus/(?P<operation>.*)/(?P<id_input>[0-9]+)/$',views.like,name='coursestatus'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

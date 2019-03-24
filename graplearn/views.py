@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from .models import Course, VideoCourse, VideoComment
+from .models import Course, VideoCourse, VideoComment, CourseStatus
 from .forms import CourseForm, VideoCourseForm, VideoCommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -13,14 +13,20 @@ def index(request):
 
 	ListCourse = Course.getAllCourseByLevel()
 	# ListCourse = ListCourse[::-1]
-	ListCourse = Paginator(ListCourse,12)
-
+	course_status = []
+	for course in ListCourse:
+		each_course = CourseStatus.objects.get_or_create(course=course)
+		user_liked_course = each_course[0].like.all()
+		course_status.append(
+			(user_liked_course,course)
+			)
+	course_status = Paginator(course_status,12)
 	page = request.GET.get('page')
-	ListCourse = ListCourse.get_page(page)
+	course_status = course_status.get_page(page)
 	context = {
 		'judul' : 'graplearn | Learn Everything',
 		'jumboTag' : 'Pilih Kursus yang kamu suka!',
-		'ListCourse' : ListCourse,
+		'ListCourse' : course_status,
 	}
 
 	if request.method == 'POST':
@@ -302,4 +308,9 @@ def deleteCourse(request,id_input):
 	else:
 		course.user.profile.un_gainExp(35)
 		course.delete()
+	return redirect("graplearn:index")
+
+@login_required
+def like(request,operation,id_input):
+	CourseStatus.operation(user = request.user,method=operation,id_input=id_input)
 	return redirect("graplearn:index")

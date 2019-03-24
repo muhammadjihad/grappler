@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from operator import itemgetter
+from django.urls import reverse
 # Create your models here.
 
 
@@ -49,6 +50,26 @@ class Course(models.Model):
 				list_courses.append(course)
 		return list_courses
 
+class CourseStatus(models.Model):
+	course = models.OneToOneField(Course, on_delete=models.CASCADE)
+	like = models.ManyToManyField(User, blank=True,null=True, related_name='like')
+	view = models.ManyToManyField(User, blank=True,null=True, related_name='view')
+
+	def __str__(self):
+		return self.course.judul
+
+	@classmethod
+	def operation(cls,user,method,id_input):
+		if method == "like":
+			course = Course.objects.get(id=id_input)
+			course_status = cls.objects.get_or_create(
+					course = course
+				)
+			if not user in course_status[0].like.all():
+				course_status[0].like.add(user)
+			else:
+				course_status[0].like.remove(user)
+		return reverse("graplearn:index")
 
 class VideoCourse(models.Model):
 

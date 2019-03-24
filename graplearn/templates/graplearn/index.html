@@ -53,7 +53,7 @@
 
 {% block konten1 %}
 		<div class="container course">
-			{% for course in ListCourse  %}
+			{% for list_like,course in ListCourse  %}
 			<a href="{% url "graplearn:detailcourse" course.id %}">
 				<div class="card text-center">
 					<img src="{{course.thumbnail.url}}" alt="">
@@ -104,6 +104,11 @@
 						{% endif %}
 					</div>
 					<button class="btn btn-success ajaxcall" url='{% url "graplearn-api:detailcourse" course.id %}'>klik</button>
+					{% if user in list_like %}
+					<a href="{% url "graplearn:coursestatus" "like" course.id %}"><button class="btn btn-danger">Unlike</button></a>
+					{% else %}
+					<a href="{% url "graplearn:coursestatus" "like" course.id %}"><button class="btn btn-success">Like</button></a>
+					{% endif %}
 				</div>
 			</a>		
 			{% endfor %}
