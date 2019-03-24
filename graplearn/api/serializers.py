@@ -11,10 +11,6 @@ class ListCourseSerializer(serializers.ModelSerializer):
 				'judul',
 				'kategori',
 				'deskripsi',
-				'harga',
-				'published',
-				'like',
-				'view'
 			)
 
 class DetailCourseSerializer(serializers.ModelSerializer):
@@ -30,4 +26,14 @@ class DetailCourseSerializer(serializers.ModelSerializer):
 				'published',
 				'like',
 				'view',
+			)
+
+class UpdateCourseSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Course
+		fields = (
+				'judul',
+				'kategori',
+				'deskripsi',
+				'harga'
 			)

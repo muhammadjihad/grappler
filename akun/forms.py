@@ -28,5 +28,6 @@ class ProfileForm(forms.ModelForm):
 				'status',
 				'username',
 				'koin',
-				'user_level'
+				'user_level',
+				'user_exp',
 			)

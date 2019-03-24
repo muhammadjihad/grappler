@@ -8,6 +8,7 @@ app_name = 'graplearn'
 urlpatterns=[
 	path('createcourse/', views.createCourse, name='createcourse'),
 	path('', views.index, name = 'index'),
+	re_path(r'^delete/(?P<id_input>[0-9]+)/$',views.deleteCourse, name='deletecourse'),
 	re_path(r'^filter/(?P<filter_input>.+)/(?P<judul_input>.+)/$',views.index_filter,name ='filtercourse'),
 	re_path(r'^coba/(?P<id_input>[0-9]+)/$',views.cobaDetail,name='cobadetail'),
 	re_path(r'^update/(?P<id_update>[0-9]+)/$',views.updateCourse, name='updatecourse'),

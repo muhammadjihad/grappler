@@ -80,6 +80,8 @@ def index_filter(request,filter_input,judul_input):
 def createCourse(request):
 
 	courseForm = CourseForm
+	userCourses = MyCourse.objects.get(user = request.user)
+
 
 	context = {
 		'judul' : 'Upload Courses',
@@ -93,6 +95,7 @@ def createCourse(request):
 			new_course = courseForm.save(commit=False)
 			new_course.user = request.user
 			new_course.save()
+			userCourses.courses.add(new_course)
 			userProfile = Profile.objects.get(user = request.user)
 			userProfile.gainExp(35)
 			return redirect ('graplearn:index')
@@ -220,6 +223,7 @@ def addVideoCourse(request,id_course):
 
 	return render(request,'graplearn/addvideocourse.html', context)
 
+@login_required
 def buy(request,id_course):
 
 	userCourses, created = MyCourse.objects.get_or_create(
@@ -229,11 +233,9 @@ def buy(request,id_course):
 	dompet, created = Dompet.objects.get_or_create(
 			user = request.user
 		)
-	print(request.user)
 	user =  User.objects.get(username = request.user.username)
 	userMineCourses = Course.objects.filter(user = user)
 	dompetUserCourse,created = Dompet.objects.get_or_create(user = courseTarget.user)
-	print(dompetUserCourse)
 	for userMineCourse in userMineCourses:
 		userCourses.courses.add(userMineCourse)
 
@@ -244,6 +246,7 @@ def buy(request,id_course):
 		if courseTarget not in userCourses.courses.all():
 			userCourses.courses.add(courseTarget)
 			courseTarget.view += 1
+			courseTarget.user.profile.gainExp(50)
 			dompet.uang -= coursePrice
 			dompetUserCourse.uang += coursePrice
 			courseTarget.save()
@@ -256,6 +259,7 @@ def buy(request,id_course):
 
 	return redirect('akun:profile')
 
+@login_required
 def commentVideo(request,id_comment):
 
 	video = VideoCourse.objects.get(id = id_comment)
@@ -288,3 +292,14 @@ def cobaDetail(request,id_input):
 		'detail' : Course.getDetailCourse(id_input)
 	}
 	return render(request,'graplearn/oke.html',context)
+
+@login_required
+def deleteCourse(request,id_input):
+
+	course = Course.objects.get(id = id_input)
+	if request.user != course.user:
+		return redirect("graplearn:index")
+	else:
+		course.user.profile.un_gainExp(35)
+		course.delete()
+	return redirect("graplearn:index")

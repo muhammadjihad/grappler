@@ -37,7 +37,9 @@ class Profile(models.Model):
 
 
 	def leveling(self):
-		if self.user_exp < 100:
+		if self.user.exp < 0:
+			self.user.exp = 0
+		elif self.user_exp < 100:
 			self.user_level = '1'
 			self.save()
 		elif self.user_exp < 1000:
@@ -46,10 +48,10 @@ class Profile(models.Model):
 		elif self.user_exp < 10000:
 			self.user_level = '3'
 			self.save()
-		elif self.user_exp < 10000:
+		elif self.user_exp < 100000:
 			self.user_level = '4'
 			self.save()
-		elif self.user_exp < 100000:
+		elif self.user_exp < 1000000:
 			self.user_level = '5'
 			self.save()
 		else:
