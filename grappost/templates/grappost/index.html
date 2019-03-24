@@ -94,8 +94,11 @@
 							<div class="container status">
 								<div class="row">
 									<div class="col-sm-4">
-										<a href="{% url "grappost:like" post.id %}"><img src="{% static "img/lovepost.png" %}" alt=""></a>
+										<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" post.id %}">
 										<small>{{post.like.all.count}}</small>
+										{% if user in post.like.all %}
+										<small>Liked</small>
+										{% endif %}
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/share.png" %}" alt="">
@@ -126,8 +129,11 @@
 							<div class="container status">
 								<div class="row">
 									<div class="col-sm-4">
-										<img src="{% static "img/lovepost.png" %}" alt="">
+										<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" trendingpost.id %}">
 										<small>{{trendingpost.like.all.count}}</small>
+										{% if user in trendingpost.like.all %}
+										<small>Liked</small>
+										{% endif %}
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/share.png" %}" alt="">
@@ -149,4 +155,28 @@
 
 {% block scriptsOpt %}
 	<script src="{% static "js/grappost/index.js" %}"></script>
+	<script>
+		$(document).ready(function(){
+
+			$('.lovepost').on('click',function(){
+				$.ajax({
+					method:"GET",
+					url:$(this).attr('url'),
+					data:{},
+					success:function(){
+						console.log('ajax berhasil')
+					},
+				})
+				let likeSymbol=$(this).next().next()
+				if(likeSymbol.text() == 'Liked'){
+					$(this).next().text(parseInt($(this).next().text())-1)
+					$(this).next().next().remove()
+				} else {
+					$(this).next().text(parseInt($(this).next().text())+1)
+					$(this).next().after("<small class='like'>Liked</small>")
+				}
+			});
+
+		});
+	</script>
 {% endblock scriptsOpt %}
