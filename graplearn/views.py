@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from .models import Course, VideoCourse, VideoComment, CourseStatus
+from .models import Course, VideoCourse, VideoComment, CourseStatus, CourseAdvertisment
 from .forms import CourseForm, VideoCourseForm, VideoCommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -10,7 +10,7 @@ from django.core.files.storage import  FileSystemStorage
 from django.core.paginator import Paginator
 
 def index(request):
-
+	courseAds = CourseAdvertisment.objects.all()
 	ListCourse = Course.getAllCourseByLevel()
 	# ListCourse = ListCourse[::-1]
 	course_status = []
@@ -20,13 +20,14 @@ def index(request):
 		course_status.append(
 			(user_liked_course,course)
 			)
-	course_status = Paginator(course_status,12)
+	course_status = Paginator(course_status,14)
 	page = request.GET.get('page')
 	course_status = course_status.get_page(page)
 	context = {
 		'judul' : 'graplearn | Learn Everything',
 		'jumboTag' : 'Pilih Kursus yang kamu suka!',
 		'ListCourse' : course_status,
+		'courseAds' :courseAds,
 	}
 
 	if request.method == 'POST':
@@ -48,6 +49,7 @@ def index_filter(request,filter_input,judul_input):
 
 	ListCourse = None
 	course_status = []
+	courseAds = CourseAdvertisment.objects.all()
 
 	def arrangement():
 		for course in ListCourse:
@@ -69,11 +71,16 @@ def index_filter(request,filter_input,judul_input):
 		return redirect("graplearn:index")
 	arrangement()
 
+	course_status = Paginator(course_status,14)
+	page = request.GET.get('page')
+	course_status = course_status.get_page(page)
+
 	context = {
 		'judul' : 'graplearn | Learn Everything',
 		'jumboTag' : 'Pilih Kursus yang kamu suka!',
 		'ListCourse' : course_status,
 		'all' : 'all',
+		'courseAds' :courseAds,
 	}
 
 	if request.method == 'POST':

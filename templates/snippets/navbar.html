@@ -1,21 +1,7 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-sm navbar-light" style='background-color:#1264AE;border-radius:4px;'>
-  <div class="container">
-    <a class="navbar-brand" href="{% url "home" %}"><img src="{% static "img\logo.png" %}" alt=""></a>
-      <div class="container search-menu">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Mau belajar apa hari ini?" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            </div>
-          </div>
-          <div class="col-sm-6">
-              <button class="btn btn-success" style="margin-top:10px;">Search</button>
-          </div>
-        </div>
-      </div>
-  </div>
+<a class="navbar-brand" href="{% url "home" %}"><img src="{% static "img\logo.png" %}" alt=""></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

@@ -50,6 +50,13 @@ class Course(models.Model):
 				list_courses.append(course)
 		return list_courses
 
+class CourseAdvertisment(models.Model):
+	course = models.OneToOneField(Course, on_delete=models.CASCADE)
+	start = models.DateField(auto_now_add=True)
+
+	def __str__(self):
+		return self.course.judul
+
 class CourseStatus(models.Model):
 	course = models.OneToOneField(Course, on_delete=models.CASCADE)
 	like = models.ManyToManyField(User, blank=True, related_name='like')
