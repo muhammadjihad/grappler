@@ -29,7 +29,7 @@ class Profile(models.Model):
 			('5','Expert'),
 			('6','Legend'),
 		)
-	user_level		= models.CharField(max_length=1,choices=PILIHAN_LEVEL,default='1')
+	user_level	= models.CharField(max_length=1,choices=PILIHAN_LEVEL,default='1')
 	user_exp = models.PositiveIntegerField(default=0)
 
 	def __str__(self):

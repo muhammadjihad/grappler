@@ -1,4 +1,4 @@
-const status = document.querySelector('div.container.profilecontainer div.status p');
+const status = document.querySelector('div.profilecontainer small.level');
 console.log(status)
 if(status.innerHTML.toLowerCase() == 'legend'){
 	status.parentElement.classList.add('legend');

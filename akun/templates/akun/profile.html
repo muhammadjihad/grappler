@@ -7,60 +7,54 @@
 {% endblock cssOpt %}
 
 {% block konten1 %}
-	<div class="container profilecontainer">
-		{% if settingbutton %}
-			<a href="{% url "akun:updateprofile" userProfile.id %}">
-			<div class="container setting">
-			<small>{{settingbutton}}</small></div></a>
-			<div class="clear"></div>
-		{% endif %}
-		<div class="row mt-4">
-			<div class="col-sm-12 text-center">
-			<img src="{{userProfile.foto.url}}" alt="" class='profilepicture'>			
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-12 text-center mt-3">
-				<h3>{{userProfile.nama}}</h3>
-			</div>
-		</div>
-		{% if userCoin %}
-			<div class="coin">
-				<img src="{% static "img/coin.png" %}" alt="">
-				<h5>{{userCoin.uang}}</h5>
-			</div>
-		{% endif %}
-		<div class="row text-center">
-			<div class="col-sm-12">
-				<div class="status text-center">
-					<p>{{userProfile.get_user_level_display}}</p>
+	{% if userProfile.thumbnail %}
+		<img src="{{userProfile.thumbnail.url}}" alt="" class="thumbnail">
+	{% endif %}
+		<div class="profilecontainer text-center">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="row">
+						<div class="col-sm-6">
+							<img src="{{userProfile.foto.url}}" alt="" class="profilepicture">
+						</div>
+						<div class="col-sm-6">
+							<h6>{{userProfile.nama}}</h6>
+							<hr>
+							<div class="userlevel text-white">
+								<small class="mb-5 level">{{userProfile.get_user_level_display}}</small>
+							</div>
+							<h6 class='mt-3'>{{userProfile.waktu_lahir}}</h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="deskripsikanal">
+						<p>{{userProfile.deskripsi_kanal}}</p>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<h6>Contact Me:</h6>
+					<hr>
+					<small>{{userProfile.alamat}}</small>
+					<div class="row profilestatus">
+						<div class="col-sm-3">
+							<img src="{% static "img/facebook.png" %}" alt="">
+						</div>
+						<div class="col-sm-3">
+							<img src="{% static "img/twitter.png" %}" alt="">
+						</div>
+						<div class="col-sm-3">
+							<img src="{% static "img/instagram.png" %}" alt="">
+						</div>
+						<div class="col-sm-3">
+							<img src="{% static "img/linkedin.png" %}" alt="">
+						</div><div class="col-sm-3">
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-12 text-center mt-3">
-				<p>{{userProfile.deskripsi_kanal}}</p>
-			</div>
-		</div>
-		<hr>
-		<div class="row status">
-			<div class="col-sm-4">
-				<img src="{% static "img/link.png" %}" alt="">
-				<h5>Linked</h5>
-				<p>1204</p>
-			</div>
-			<div class="col-sm-4">
-				<img src="{% static "img/user.png" %}" alt="">
-				<h5>Students</h5>
-				<p>5658</p>
-			</div>
-			<div class="col-sm-4">
-				<img src="{% static "img/answer.png" %}" alt="">
-				<h5>Answer</h5>
-				<p>15000</p>
-			</div>
-		</div>
-	</div>
 	<div class="container profileindex text-center">
 		<div class="row">
 			<div class="col-sm-4">

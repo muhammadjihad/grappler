@@ -3,21 +3,49 @@ div div div h3{
 	font-family: Montserrat
 }
 
-div.profilecontainer{
+/* div.profilecontainer{
 	position: relative;
 	background-color:#777;
-	width:100%;
-	margin-top:65px;
 	border-radius: 4px;
 	border: 1px solid #ddd;
 	text-align: center;
 	box-shadow: 0 0 2px black;
+} */
+
+/* Bagian Profile */
+
+img.thumbnail{
+	height:250px;
+	width:100%;
 }
 
+div.profilecontainer{
+	width:100%;
+	background-color:#ddd;
+	padding:10px;
+}
+
+div.deskripsikanal{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+div.deskripsikanal p{
+	font-family:"Segoe UI";
+}
 
 div.profilecontainer div.row.status img{
 	width:50px;
 	height:50px;
+}
+
+div.row.profilestatus{
+	margin-top: 35px;
+}
+
+div.profilecontainer div.row.profilestatus img{
+	width:25px;
+	height:25px;
 }
 
 div.coin img{
@@ -59,11 +87,11 @@ div.setting small{
 	width:150px;
 }
 
-div.profilecontainer p{
+/* div.profilecontainer p{
 	font-family: Quicksand;
 	color:white;
 	font-size: 20px;
-}
+} */
 
 div.profilecontainer h5{
 	color:white;
@@ -231,6 +259,7 @@ div.mycourses div.profile img{
 	height: 75px;
 	border-radius: 50%;
 }
+
 
 .legend{
 	background-color:purple;
