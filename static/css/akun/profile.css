@@ -34,6 +34,14 @@ div.deskripsikanal p{
 	font-family:"Segoe UI";
 }
 
+div.profilestatus{
+	padding:10px;
+}
+
+div.profilestatus div.row img{
+	width:30px;
+}
+
 div.profilecontainer div.row.status img{
 	width:50px;
 	height:50px;
@@ -47,6 +55,96 @@ div.profilecontainer div.row.profilestatus img{
 	width:25px;
 	height:25px;
 }
+
+div.content div.openingvideo{
+	padding:25px;
+}
+
+div.content div.openingvideo video{
+	width:100%;
+	border:1px solid white;
+	box-shadow: 0 0 2px black;
+	box-sizing: border-box;
+}
+
+div.content div.openingvideo h2{
+	display:block;
+	color:white;
+	background: #1264AE;
+	padding: 10px;
+	border-radius: 5px;
+	margin-top: -17px;
+}
+
+div.usercourses{
+	width:210px;
+	height:210px;
+	margin:10px;
+	float:left;
+	background-color: transparent;
+	text-align: center;
+	align-items: center;
+}
+
+div.usercourses small{
+	text-align: left;
+}
+
+div.thumbnail{
+	width:100%;
+	height:100px;
+}
+
+div.usercourses img{
+	width:100%;
+	height: 100%;
+	background-color: grey;
+}
+
+div.deskripsi{
+	margin-top: -18px;
+	height:50px;
+	overflow: hidden;
+}
+
+div.usercourses div.coursestatus{
+	padding: 1px
+}
+div.usercourses div.coursestatus div.row img{
+	background-color: transparent;
+	width:25px;
+	height:25px;
+}
+
+div.prestasi{
+	width:90%;
+	margin:auto;
+	margin-top: 10px;
+	text-align: center;
+}
+
+div.prestasi h4, div.testimoni h4{
+	text-align: center;
+	display: inline-block;
+	background-color: blue;
+	padding: 10px;
+	color:white;
+	border-radius: 7px;
+}
+
+div.testimoni{
+	margin-top: 30px;
+}
+
+div.testimoni img{
+	width:70px;
+	height: 70px;
+	border-radius: 50%;
+	border:1px solid white;
+	box-shadow: 0 0 2px black;
+}
+
+/* Border */
 
 div.coin img{
 	width: 25px;
@@ -260,6 +358,9 @@ div.mycourses div.profile img{
 	border-radius: 50%;
 }
 
+div.userlevel{
+	color:white;
+}
 
 .legend{
 	background-color:purple;
@@ -267,7 +368,7 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
@@ -277,7 +378,7 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
@@ -287,7 +388,7 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
@@ -297,7 +398,7 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
@@ -307,7 +408,7 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
@@ -317,25 +418,29 @@ div.mycourses div.profile img{
 	padding:1px;
 	line-height:40px;
 	height:40px;
-	width:150px;
+	width:100%;
 	margin:auto;
 }
 
-div.profileindex div.userposting div.headerpostingan{
-	background-color: white;
-	border:1px solid white;
-	box-shadow: 0 0 2px black
-}
-
-div.profileindex div.userposting div.postingan{
+div.postingan{
+	width:230px;
+	height:300px;
 	background-color:white;
 	margin-top:10px;
 	padding:10px;
 	border:1px solid white;
 	box-shadow: 0 0 2px black;
+	float: left;
+	margin-right:10px;
+	position: relative;
 }
 
-div.profileindex div.userposting img{
-	width:25px;
-	height: 25px;
+div.postingan div.isipostingan{
+	height: 165px;
+	overflow: auto;
+}
+
+div.postingan img{
+	width:15px;
+	height:15px;
 }

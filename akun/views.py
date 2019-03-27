@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from graplearn.models import Course, VideoCourse
 from grappost.models import Postingan
+from akun.models import OpeningVideo, Testimoni
 # Create your views here.
 
 def create(request):
@@ -57,6 +58,8 @@ def profile(request):
 		users.append(course.user)
 	jumlahCourse = len(userCourse)
 	userPost = Postingan.objects.filter(user = current_user)
+	userOpeningVideo = OpeningVideo.objects.get(user = request.user)
+	testimoni = Testimoni.objects.filter(receiver_user = request.user)[:4]
 
 	context = {
 		'judul' : 'Profile',
@@ -68,7 +71,9 @@ def profile(request):
 		'userCoin' : userCoin,
 		'users' : users,
 		'myCourses' : myCourses,
-		'userPost' : userPost
+		'userPost' : userPost,
+		'openingVideo' : userOpeningVideo,
+		'testimoni' :testimoni,
 	}
 
 	if request.user.profile == userProfile:

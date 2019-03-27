@@ -1,20 +1,21 @@
-const status = document.querySelector('div.profilecontainer small.level');
-console.log(status)
-if(status.innerHTML.toLowerCase() == 'legend'){
-	status.parentElement.classList.add('legend');
-}
-if(status.innerHTML.toLowerCase() == 'novice'){
-	status.parentElement.classList.add('novice');
-}
-if(status.innerHTML.toLowerCase() == 'expert'){
-	status.parentElement.classList.add('expert');
-}
-if(status.innerHTML.toLowerCase() == 'beginner'){
-	status.parentElement.classList.add('beginner');
-}
-if(status.innerHTML.toLowerCase() == 'competent'){
-	status.parentElement.classList.add('competent');
-}
-if(status.innerHTML.toLowerCase() == 'master'){
-	status.parentElement.classList.add('master');
-}
+const status = document.querySelectorAll('small.level');
+status.forEach(function(el) {
+	if(el.innerHTML.toLowerCase() == 'legend'){
+		el.parentElement.classList.add('legend');
+	}
+	if(el.innerHTML.toLowerCase() == 'novice'){
+		el.parentElement.classList.add('novice');
+	}
+	if(el.innerHTML.toLowerCase() == 'expert'){
+		el.parentElement.classList.add('expert');
+	}
+	if(el.innerHTML.toLowerCase() == 'beginner'){
+		el.parentElement.classList.add('beginner');
+	}
+	if(el.innerHTML.toLowerCase() == 'competent'){
+		el.parentElement.classList.add('competent');
+	}
+	if(el.innerHTML.toLowerCase() == 'master'){
+		el.parentElement.classList.add('master');
+	}
+});

@@ -15,7 +15,7 @@ class Profile(models.Model):
 	username		= models.CharField(max_length=25) #ini hapus aja
 	waktu_lahir 	= models.DateField(auto_now_add=True)
 	bio				= models.TextField(max_length=300, blank=True)
-	foto 			= models.ImageField(default='mantap.jpg',blank=True)
+	foto 			= models.ImageField(default='mantap.jpg',upload_to='profilepicture/',blank=True)
 	koin			= models.PositiveIntegerField() # ini nanti dibuat class sendiri aja
 	alamat 			= models.CharField(max_length=50, blank=True)
 	thumbnail 		= models.ImageField(blank=True,default='student.png')
@@ -25,8 +25,8 @@ class Profile(models.Model):
 			('1','Novice'),
 			('2','Beginner'),
 			('3','Competent'),
-			('4','Master'),
-			('5','Expert'),
+			('4','Expert'),
+			('5','Master'),
 			('6','Legend'),
 		)
 	user_level	= models.CharField(max_length=1,choices=PILIHAN_LEVEL,default='1')
@@ -69,6 +69,14 @@ class Profile(models.Model):
 	class Meta:
 		ordering = ["user_level"]
 
+class OpeningVideo(models.Model):
+
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	video = models.FileField(upload_to='openingprofilevideo/')
+	judul = models.CharField(max_length=25)
+
+	def __str__(self):
+		return self.user.username
 
 class Proyek(models.Model):
 
@@ -96,6 +104,16 @@ class MyCourse(models.Model):
 
 	def __str__(self):
 		return '{}'.format(self.user)
+
+class Testimoni(models.Model):
+
+	receiver_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver_user')
+	sender_user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='sender_user')
+	testimoni = models.TextField()
+	published = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return "{} to {}".format(self.sender_user.username, self.receiver_user.username)
 
 class Friend(models.Model):
 

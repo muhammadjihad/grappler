@@ -9,6 +9,8 @@
 {% block konten1 %}
 	{% if userProfile.thumbnail %}
 		<img src="{{userProfile.thumbnail.url}}" alt="" class="thumbnail">
+	{% else %}
+		<img src="{% static "img/background.jpg" %}" alt="" class="thumbnail">
 	{% endif %}
 		<div class="profilecontainer text-center">
 			<div class="row">
@@ -55,178 +57,100 @@
 				</div>
 			</div>
 		</div>
-	<div class="container profileindex text-center">
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="container biodata">
-					<h4>Biodata</h4>
-					<hr>
-					<p>{{userProfile.nama}}</p>
-					<p>{{userProfile.bio}}</p>
-					<p>{{userProfile.waktu_lahir}}</p>
-					<p>{{userProfile.alamat}}</p>
-					<p>+62{{userProfile.kontak}}</p>
+
+		<div class="profilestatus bg-dark">
+			<div class="row text-center text-white">
+				<div class="col-sm-2">
+					<img src="{% static "img/user.png" %}" alt="">
+					<small>Students</small><br>
+					<small>25</small>
 				</div>
-				<div class="container pendidikan">
-					<ul>
-						<li>SD</li>
-						<li>SMP</li>
-						<li>SMA</li>
-						<li>Kuliah</li>
-					</ul>
+				<div class="col-sm-2">
+					<img src="{% static "img/semuakursus.png" %}" alt="">
+					<small>Course</small><br>
+					<small>{{userCourse.count}}</small>
 				</div>
-				<div class="container mycourses mt-4">
-					<div class="judul">
-						<h2>Kursus yang kamu beli</h2>
-					</div>
-					{% for course in myCourses  %}
-					<a href="{% url "graplearn:detailcourse" course.id %}">
-						<div class="card text-center">
-							<img src="{{course.thumbnail.url}}" alt="">
-							<div class="judul">
-								<h4>{{course.judul}}</h4>
-							</div>
-							<div class="card-body">
-							<hr>
-								<div class="coursestatus">
-									<div class="row">
-										<div class="col-sm-4">
-											<img src="{% static "img/view.png" %}" alt="">
-											<p>{{course.view}}</p>
-										</div>
-										<div class="col-sm-4">
-											<img src="{% static "img/like.png" %}" alt="">
-											<p>{{course.like}}</p>
-										</div>
-										<div class="col-sm-4">
-											<img src="{% static "img/share.png" %}" alt="">
-											<p>{{course.share}}</p>
-										</div>
-									</div>
-								</div>
-							<hr>
-							<div class="container profile">
-								<div class="row">
-									<div class="col-sm-6">
-										<img src="{{course.user.profile.foto.url}}" alt="">
-									</div>
-									<div class="col-sm-6">
-										<p>{{course.user.profile.nama}}</p>
-										<div class="boxlevel">
-											<p>{{course.user.profile.get_user_level_display}}</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<p>{{course.deskripsi}}</p>
-							{% if other %}
-								<a href="{% url "akun:akunmethod" 'like' course.id %}"><button class="btn btn-success">Like!</button></a>
-							{% endif %}
-							</div>
-						</div>
-					</a>
-					{% endfor %}
+				<div class="col-sm-2">
+					<img src="{% static "img/like.png" %}" alt="">
+					<small>Liked</small><br>
+					<small>25</small>
+				</div>
+				<div class="col-sm-2">
+					<img src="{% static "img/share.png" %}" alt="">
+					<small>Shared</small><br>
+					<small>25</small>
+				</div>
+				<div class="col-sm-2">
+					<img src="{% static "img/lovepost.png" %}" alt="">
+					<small>Loved</small><br>
+					<small>25</small>
+				</div>
+				<div class="col-sm-2">
+					<img src="{% static "img/answer.png" %}" alt="">
+					<small>Anwered</small><br>
+					<small>25</small>
 				</div>
 			</div>
-			<div class="col-sm-5 usercourse">
-				<div class="row text-center">
-					<div class="col-sm-12 text-center">
-						<div class="container coursesprofile">
-							<div class="row">
-								{# Bagian jumlah Course #}
-								<div class="col-sm-3">
-									<img src="{% static "img/course.png" %}" alt="">
-									<h5>Course</h5>
-									<hr>
-									<p>{{jumlahCourse}}</p>
-								</div>
-								{# Bagian Views #}
-								<div class="col-sm-3">
-									<img src="{% static "img/view.png" %}" alt="">
-									<h5>Viewed</h5>
-									<hr>
-									<p>52156</p>
-								</div>
-								{# Bagian Liked #}
-								<div class="col-sm-3">
-									<img src="{% static "img/like.png" %}" alt="">
-									<h5>Liked</h5>
-									<hr>
-									<p>1204</p>
-								</div>
-								{# Bagian Shared #}
-								<div class="col-sm-3">
-									<img src="{% static "img/share.png" %}" alt="">
-									<h5>Shared</h5>
-									<hr>
-									<p>1124</p>
-								</div>
-							</div>
+		</div>
+
+		<div class="content">
+			<div class="row">
+				{# GRAPLEARN #}
+				<div class="col-sm-8">
+					{# Opening video #}
+					<div class="openingvideo">
+						<div class="text-center">	
+							<h2>{{openingVideo.judul}}</h2>
+							<video src="{{openingVideo.video.url}}" autoplay="autoplay" controls="true" oncontextmenu="return false"></video>
+							<small>{{openingVideo.user.profile.deskripsi_kanal}}</small>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12">
-						{% for course in userCourse %}
-							<div class="container course">
-								<h1>{{course.judul}}</h1>
-								<hr>
-								{% if user in users %}
-									<a href="{% url "graplearn:addvideocourse" course.id %}"><button class="btn btn-primary">+ Video</button></a>
-									<a href="{% url "graplearn:updatecourse" course.id %}"><button class="btn btn-warning">Ubah Deskripsi</button></a>
-								{% endif %}
-								<div class="row coursedescription">
-									<div class="col-sm-4">
-										<img src="{{course.thumbnail.url}}" alt="">
-									</div>
-									<div class="col-sm-8">
-										<h5>{{course.kategori}}</h5>
-										<p>{{course.deskripsi}}</p>
-										<img src="{% static "img/coin.png" %}" alt="">
-										<h4>{{course.harga}}</h4>
-									</div>
+					<hr>
+					{# UserCourse #}
+					{% for course in userCourse  %}
+						<div class="usercourses text-left">
+							<div class="thumbnail">
+								<img src="{{course.thumbnail.url}}" alt="">
+							</div>
+							<div class="coursestatus">
+								<p><b>{{course.judul}}</b></p>
+								<div class="deskripsi">
+									<small>{{course.deskripsi}}</small>
 								</div>
-								<hr>
-								<div class="row courseprofile">
+								<div class="row text-center">
 									<div class="col-sm-4">
-										<img src="{% static "img/view.png" %}" alt="">
-										<h5>Viewed</h5>
-										<hr>
-										<p>553</p>
-										{% if not user %}
-											<a href="{% url "akun:akunmethod" 'like' course.id %}"><button class="btn btn-success">Like</button></a>
-										{% endif %}
+										<img src="{% static "img/user.png" %}" alt="">
+										<br>
+										<small>25</small>
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/like.png" %}" alt="">
-										<h5>Like</h5>
-										<hr>
-										<p>{{course.like}}</p>
+										<br>
+										<small>25</small>
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/share.png" %}" alt="">
-										<h5>Shared</h5>
-										<hr>
-										<p>1174</p>
+										<br>
+										<small>25</small>
 									</div>
 								</div>
-								<a href="{% url "graplearn:detailcourse" course.id %}" class="mb-4"><button class="btn btn-success">Lihat</button></a>
 							</div>
-						{% endfor %}
-					</div>
+						</div>
+					{% endfor %}
+					<div class="clear"></div>
 				</div>
-			</div>
-			<div class="col-sm-3 userposting">
-				<div class="container mt-4 headerpostingan mb-2">
-							<h6>Postingan</h6>
-				</div>
-				<a href="{% url "grappost:createpost" %}" class="mt-4"><button class="btn-sm btn-success">Buat Post +</button></a>
+				{# ENDGRAPLEARN #}
+
+				{# GRAPPOST #}
+				<div class="col-sm-4">
 				{% for post in userPost  %}
 					<div class="container postingan">
 						<div class="container judulpostingan"><h6>{{post.judul}}</h6></div>
 						<hr>
-						<p>{{post.isi}}</p>
-						<div class="status">
+						<div class="isipostingan">
+							<p>{{post.isi}}</p>	
+						</div>
+						<div class="status text-center">
 							<div class="row">
 								<div class="col-sm-6 lovepost">
 									<img src="{% static "img/lovepost.png" %}" alt="">
@@ -240,9 +164,55 @@
 						</div>
 					</div>
 				{% endfor %}
+				<div class="clear"></div>
+				</div>
+				{# ENDGRAPPOST #}
 			</div>
 		</div>
-	</div>
+		<hr>
+
+		{# Prestasi / Portofolio #}
+		<div class="prestasi">
+			<h4 class="bg-info">Penghargaan</h4>
+			<ul class="list-group text-left">
+			  <li class="list-group-item">Cras justo odio</li>
+			  <li class="list-group-item">Dapibus ac facilisis in</li>
+			  <li class="list-group-item">Morbi leo risus</li>
+			  <li class="list-group-item">Porta ac consectetur ac</li>
+			  <li class="list-group-item">Vestibulum at eros</li>
+			</ul>
+		</div>
+		<hr>
+		{# Testimoni #}
+		<div class="container testimoni text-center">
+			<h4 class="bg-info mb-5">Testimoni</h4>
+			<div class="row">
+				{% for testi in testimoni  %}
+						<div class="col-sm-3">
+							<div class="userprofile">
+								<div class="row">
+									<div class="col-sm-6">
+										<img src="{{testi.sender_user.profile.foto.url}}" alt="">
+									</div>
+									<div class="col-sm-6">
+										<h6>{{testi.sender_user.username}}</h6>
+										<div class="userlevel">
+											<small class='level'>{{testi.sender_user.profile.get_user_level_display}}</small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<small>{{testi.testimoni}}</small><br>
+							<small class='text-muted'>{{testi.published}}</small>
+						</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<br>
+		<br>
+		<br>
 {% endblock konten1 %}
 
 {% block scriptsOpt %}

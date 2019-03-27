@@ -219,10 +219,7 @@ def addVideoCourse(request,id_course):
 	if request.user != course.user:
 		messages.error(request,'Kamu gaboleh macem macem ya :)')
 		return redirect('home')
-	data ={
-		'data' : course
-	}
-	videoCourseForm = VideoCourseForm(initial=data)
+	videoCourseForm = VideoCourseForm(request.POST or None, request.FILES or None)
 
 	context = {
 		'judul' : 'Tambah video kursus',
@@ -232,20 +229,16 @@ def addVideoCourse(request,id_course):
 		'videoCourses' : videoCourses,
 	}
 	if request.method == 'POST':
-		my_file = request.FILES['video']
-		video = VideoCourse.objects.create(
-				course = course,
-				judul = request.POST.get('judul'),
-				video = my_file,
-				deskripsi = request.POST.get('deskripsi'),
-				referensi = request.POST.get('referensi'),
-		)
-		video.save()
-		VideoComment.objects.create(
-				user = request.user,
-				videoCourse = video,
-				comment = '',
-			)
+		videoCourseForm = VideoCourseForm(request.POST or None, request.FILES or None)
+		if videoCourseForm.is_valid():
+			video = videoCourseForm.save(commit=False)
+			video.course = course
+			video.save()
+			VideoComment.objects.create(
+					user = request.user,
+					videoCourse = video,
+					comment = '',
+				)
 
 	return render(request,'graplearn/addvideocourse.html', context)
 
