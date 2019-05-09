@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block konten1 %}
+	<div class="container mt-4 text-center">
+		<h5>Daftar Petunjuk</h5>
+		<ul class="list-group text-left">
+			<li class="list-group-item bg-white"><a href="{% url "help:isikoin" %}">Cara Mengisi Koin</a></li>
+			<li class="list-group-item bg-white"><a href="{% url "help:tukarkoin" %}">Cara Menukar Koin</a></li>
+			<li class="list-group-item bg-white"><a href="{% url "help:iklankursus" %}">Cara Mengiklankan Kursus</a></li>
+		</ul>
+		<hr>
+		<h5>Seputar Flixnote</h5>
+		<ul class="list-group text-left">
+			<li class="list-group-item bg-white"><a href="{% url "help:sistemlevel" %}">Sistem Level</a></li>
+			<li class="list-group-item bg-white"><a href="{% url "help:paketiklan" %}">Paket Iklan</a></li>
+			<li class="list-group-item bg-white"><a href="">Tips</a></li>
+		</ul>
+	</div>
+{% endblock konten1 %}

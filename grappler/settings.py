@@ -42,12 +42,15 @@ INSTALLED_APPS = [
     'akun',
     'graplearn',
     'grappost',
-    'rest_framework'
+    'help',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -105,13 +108,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK={
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ),
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -137,3 +147,20 @@ LOGIN_URL = 'akun:login'
 LOGIN_REDIRECT_URL = 'akun:profile'
 LOGOUT_URL = 'akun:logout'
 django_heroku.settings(locals())
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'flixnote.com'
+EMAIL_HOST_USER = 'admin@flixnote.com'
+EMAIL_HOST_PASSWORD = 'Secondheartbeat02'
+EMAIL_PORT = 587
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3030',
+)
+CORS_ORIGIN_REGEX_WHITELIST = (
+    'localhost:3030',
+)
+
+SESSION_COOKIE_NAME = 'sessionid'

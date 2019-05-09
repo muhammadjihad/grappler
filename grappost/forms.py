@@ -7,6 +7,7 @@ class PostinganForm(forms.ModelForm):
 		fields = (
 				'judul',
 				'isi',
+				'kategori_post',
 				'file',
 			)
 		widgets = {
@@ -24,4 +25,17 @@ class PostinganForm(forms.ModelForm):
 					}
 				)
 
+		}
+
+class KomentarForm(forms.ModelForm):
+	class Meta:
+		model = Komentar
+		fields = ('isi',)
+		widgets={
+			'isi' : forms.Textarea(
+				attrs={
+					'placeholder' : 'Masukkan komentar di sini',
+					'class' : 'form-group form-control',
+				}
+			)
 		}

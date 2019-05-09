@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/akun/complain.css" %}">
+{% endblock cssOpt %}
+
+{% block konten1 %}
+	<div class="container mt-4">
+		<ul class="list-group">
+			{% for complain in complains  %}
+				<li class="list-group-item">
+					<div class="row text-center">
+						<div class="col-sm-2">
+							<small class="text-muted">dari</small>
+							<hr>
+							<img src="{{complain.sender_user.profile.foto.url}}" alt="" class="fotoprofile">
+							<a href="{% url "akun:otherprofile" complain.sender_user.id %}"><p>{{complain.sender_user.username}}</p></a>
+							<div class="userlevel">
+								<small class="level text-white">{{complain.sender_user.profile.get_user_level_display}}</small>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<small class="text-muted">Untuk</small>
+							<hr>
+							<a href="{% url "graplearn:detailcourse" complain.course.id %}"><p>{{complain.course.judul}}</p></a>
+						</div>
+						<div class="col-sm-8 text-left">
+							<small class="text-muted">Komplain :</small>
+							<p>{{complain.komplain}}</p>
+							<hr>
+							<small class="text-muted">Saran :</small>
+							<p>{{complain.saran}}</p>
+						</div>
+					</div>
+				</li>
+				<br>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/akun/profile.js" %}"></script>
+{% endblock scriptsOpt %}

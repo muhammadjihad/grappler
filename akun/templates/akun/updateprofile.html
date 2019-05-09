@@ -9,7 +9,7 @@
 
 {% block konten1 %}
 	<div class="container">
-		<form method='POST'>
+		<form method='POST' enctype="multipart/form-data">
 			{% csrf_token %}
 			{{formProfile|crispy}}
 			<button type="submit" class="btn btn-warning">Update</button>

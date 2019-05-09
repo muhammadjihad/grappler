@@ -6,6 +6,7 @@
 	<title>{{judul}}</title>
 	{% include "snippets/styles.html" %}
 	<link rel="shortcut icon" type="image/png" href="{% static "img/trending.png" %}"/>
+	<link rel="stylesheet" href="{% static "css/basestyle.css" %}">
 	{% block cssOpt %}
 		
 	{% endblock cssOpt %}
@@ -35,11 +36,14 @@
 {# Konten1 #}
 	{% block konten1 %}
 		
-		
 	{% endblock konten1 %}
 	
 
-	
+	{% block footer %}
+		{% include "snippets/footer.html" %}
+	{% endblock footer %}
+
+
 {% include "snippets/scripts.html" %}
 {% block scriptsOpt %}
 		

@@ -20,7 +20,7 @@
 			</div>
 			<div class="col-sm-6 text-center ">
 				<div class="container judul">
-					<h5>{{course.judul}}</h5>
+					<a href="{% url "graplearn:detailcourse" course.id %}"><h5>{{course.judul}}</h5></a>
 				</div>
 				<div class="container status">
 					<div class="row">

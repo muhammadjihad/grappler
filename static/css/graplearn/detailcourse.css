@@ -1,9 +1,14 @@
+div.container.profilepage{
+	margin:auto;
+	margin-top:15px;
+}
+
 #profilesection{
 	background-color:#E9E9E9;
 	border: 1px solid grey;
 	border-radius: 10px;
 	box-shadow: 0 0 2px black;
-	height:370px;
+	padding:10px;
 }
 
 
@@ -40,8 +45,14 @@ div.userprofile img{
 
 div.bordercontainer{
 	background-color:transparent;
-	height:380px;
+	height:6px;
 	width:2px;
+}
+
+div.profilepage div.container.userprofile img.verifieduser{
+	width:20px;
+	height:20px;
+	margin-bottom: 5px;
 }
 
 div.container.coursedemo{
@@ -53,7 +64,6 @@ div.container.coursedemo{
 	box-shadow: 0 0 2px black;
 	border-radius: 5px;
 	padding:15px;
-	height: 350px;
 	overflow: auto;
 }
 
@@ -128,7 +138,14 @@ div.harga{
 	margin-bottom: 10px;
 	position: relative;
 	border:1px solid white;
-	box-shadow: 0 0 1px black
+	box-shadow: 0 0 1px black;
+	cursor: pointer;
+	z-index: 99;
+	opacity: .85;
+}
+
+div.harga:hover{
+	opacity: 1;
 }
 
 div.harga img{

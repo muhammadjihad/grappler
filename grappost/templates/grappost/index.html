@@ -6,21 +6,37 @@
 {% endblock cssOpt %}
 
 {% block header %}
-
-<div class="container postbar">
-	<div class="input-group mb-3">
-		<input type="text" class="form-control" placeholder="Mau berbagi apa hari ini?" aria-label="Recipient's username" aria-describedby="basic-addon2">
-	  <input type="text" class="form-control" placeholder="Coba Ceritakan di sini :)" aria-label="Recipient's username" aria-describedby="basic-addon2">
-	  <div class="input-group-append">
-	    <button class="btn btn-warning" type="button">Upload File</button>
-	    <button class="btn btn-primary" type="button">Posting</button>
-	  </div>
-	</div>
-</div>
+	{% if all %}
+		<div class="container filter-post text-center">
+			<div class="row mt-3">
+				<div class="col-sm-12">
+					<form method="POST" class="form-group filterform">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-sm-5">
+								<input name="judul" type="text" class="form-control" placeholder="Postingan apa yang kamu cari?">
+							</div>
+							<div class="col-sm-5">
+								<select name="kategori" id="" class="form-control">
+									<option value="all">Cari berdasarkan kebutuhan</option>
+									<option value="1">Mencari Kursus</option>
+									<option value="2">Promo</option>
+									<option value="3">Bertanya</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<button class="btn btn-primary" type="submit">Filter</button>
+							</div>
+						</div>	
+					</form>
+				</div>		
+			</div>
+		</div>
+	{% endif %}
 {% endblock header %}
 
 {% block konten1 %}
-	<div class="container">
+	<div class="container mt-5">
 		<div class="row">
 			{# profile #}
 			<div class="col-sm-3 profile">
@@ -43,17 +59,15 @@
 					</div>
 					<div class="container profilestatus">
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<img src="{% static "img/post.png" %}" alt="">
+								<br>
 								<small>{{current_userPost.count}} Posted</small>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<img src="{% static "img/lovepost.png" %}" alt="">
+								<br>
 								<small>{{current_userLike}} Liked</small>
-							</div>
-							<div class="col-sm-4">
-								<img src="{% static "img/answer.png" %}" alt="">
-								<small>{{current_userComment}} Answer</small>
 							</div>
 						</div>
 					</div>
@@ -64,54 +78,118 @@
 			</div>
 			{# home #}
 			<div class="col-sm-6 index">
-				<div class="container indexjudul" id="indexjudul">
-					<h5>What's Happening?</h5>
-				</div>
-					{% for post in allPost  %}
-						<div class="container postingan">
-							<div class="container userprofilepost text-center">
-								<div class="row">
-									<div class="col-sm-6">
-										<img src="{{post.user.profile.foto.url}}">
-									</div>
-									<div class="col-sm-6">
-										<h5>{{post.user.profile.nama}}</h5>
-									</div>	
-								</div>
+				<div class="container indexjudul mb-4" id="indexjudul">
+						<div class="row text-center">
+							<div class="col-sm-4">
+								<h5>What's Happening?</h5>
+							</div>	
+							<div class="col-sm-4">
+								<a href="{% url "grappost:index" %}"><button class="btn-sm btn-dark">Yang diikuti</button></a>
 							</div>
-							<hr>
-							<h5>{{post.judul}}</h5>
-							<hr>
-							<p>{{post.isi}}</p>
-							{% if post.file %}
-								<div class="container isi">
-									<img src="{{post.file.url}}" alt="">
-								</div>
-							{% else %}
-								<div class="contaniner"></div>
-							{% endif %}
-							<hr>
-							<div class="container status">
-								<div class="row">
-									<div class="col-sm-4">
-										<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" post.id %}">
-										<small>{{post.like.all.count}}</small>
-										{% if user in post.like.all %}
-										<small>Liked</small>
-										{% endif %}
-									</div>
-									<div class="col-sm-4">
-										<img src="{% static "img/share.png" %}" alt="">
-										<small>{{post.share.all.count}}</small>
-									</div>
-									<div class="col-sm-4">
-										<img src="{% static "img/comment.png" %}" alt="" class="komentar">
-										<small>{{post.like.all.count}}</small>
-									</div>
-								</div>
+							<div class="col-sm-4">
+								<a href="{% url "grappost:index_all" "all" "all"%}"><button class="btn-sm btn-dark">Eksplor</button></a>
 							</div>
 						</div>
-					{% endfor %}
+				</div>
+					{% if all %}
+						{% for post in allPost  %}
+							<div class="container postingan">
+								<div class="container userprofilepost text-center">
+									<div class="row">
+										<div class="col-sm-6">
+											<img src="{{post.user.profile.foto.url}}">
+										</div>
+										<div class="col-sm-6">
+											<a href="{% url "akun:otherprofile" post.user.id %}"><h5>{{post.user.username}}</h5></a>
+										</div>	
+									</div>
+								</div>
+								<hr>
+								<h5>{{post.judul}}</h5>
+								<span class="mt-2 kategoripost">{{post.get_kategori_post_display}}</span>
+								<hr>
+								<p>{{post.isi}}</p>
+								{% if post.file %}
+									<div class="container isi">
+										<img src="{{post.file.url}}" alt="">
+									</div>
+								{% else %}
+									<div class="contaniner"></div>
+								{% endif %}
+								<hr>
+								<div class="container status">
+									<div class="row">
+										<div class="col-sm-6">
+											<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" post.id %}">
+											<small>{{post.like.all.count}}</small>
+											{% if user in post.like.all %}
+											<small>Liked</small>
+											{% endif %}
+										</div>
+										<div class="col-sm-6">
+											<a href="{% url "grappost:comment" post.id %}"><img src="{% static "img/comment.png" %}" alt="" class="komentar"></a>
+											<small>{{post.like.all.count}}</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					{% endif %}
+					
+					{% if not all %}
+						{% for post in allPost  %}
+						{% if post.user in current_user_friend %}
+								<div class="container postingan">
+									<div class="container userprofilepost text-center">
+										<div class="row">
+											<div class="col-sm-6">
+												<img src="{{post.user.profile.foto.url}}">
+											</div>
+											<div class="col-sm-6">
+												<h5>{{post.user.profile.nama}}</h5>
+											</div>	
+										</div>
+									</div>
+									<hr>
+									<h5>{{post.judul}}</h5>
+									<span class="mt-2 kategoripost">{{post.get_kategori_post_display}}</span>
+									<hr>
+									<p>{{post.isi}}</p>
+									{% if post.file %}
+										<div class="container isi">
+											<img src="{{post.file.url}}" alt="">
+										</div>
+									{% else %}
+										<div class="contaniner"></div>
+									{% endif %}
+									<hr>
+									<div class="container status">
+										<div class="row">
+											<div class="col-sm-6">
+												<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" post.id %}">
+												<small>{{post.like.all.count}}</small>
+												{% if user in post.like.all %}
+												<small>Liked</small>
+												{% endif %}
+											</div>
+											<div class="col-sm-6">
+												<a href="{% url "grappost:comment" post.id %}"><img src="{% static "img/comment.png" %}" alt="" class="komentar"></a>
+												<small>{{post.like.all.count}}</small>
+											</div>
+										</div>
+									</div>
+								</div>
+						{% endif %}
+						{% endfor %}
+					{% endif %}
+					{% if nofriend and not all %}
+						<div class="nofriend">
+							<h6>Kamu belum mengikuti siapapun,</h6>
+							<h6>Yuk cari mentor mentormu!</h6>
+							<br>
+							<a href="{% url "grappost:index_all" "all" "all" %}"><small>Explore</small></a>
+						</div>
+					{% endif %}
 			</div>
 			{# trending #}
 			<div class="col-sm-3 trending">
@@ -119,8 +197,21 @@
 					{% for trendingpost in trendingPostByLike  %}
 						<div class="container trendingpost">
 							<h5>{{trendingpost.judul}}</h5>
-							<img src="{% static "img/trending.png" %}" alt="">
-							<small>trending</small>
+							<span class="kategoripost">{{trendingpost.get_kategori_post_display}}</span>
+							<div class="container text-center">
+								<div class="row">
+									<div class="col-sm-6">
+										<img src="{{trendingpost.user.profile.foto.url}}" alt="" class="mb-1">
+										<br>
+										<a href="{% url "akun:otherprofile" trendingpost.user.id %}"><small>{{trendingpost.user.username}}</small></a>
+									</div>
+									<div class="col-sm-6">
+										<img src="{% static "img/trending.png" %}" alt="" class="mb-1">
+										<br>
+										<small>trending</small>
+									</div>
+								</div>
+							</div>
 							<hr>
 							<div class="container isi">
 								<p>{{trendingpost.isi}}</p>
@@ -128,19 +219,15 @@
 							<hr>
 							<div class="container status">
 								<div class="row">
-									<div class="col-sm-4">
+									<div class="col-sm-6">
 										<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" trendingpost.id %}">
 										<small>{{trendingpost.like.all.count}}</small>
 										{% if user in trendingpost.like.all %}
 										<small>Liked</small>
 										{% endif %}
 									</div>
-									<div class="col-sm-4">
-										<img src="{% static "img/share.png" %}" alt="">
-										<small>{{trendingpost.share.all.count}}</small>
-									</div>
-									<div class="col-sm-4">
-										<img src="{% static "img/comment.png" %}" alt="">
+									<div class="col-sm-6">
+										<a href="{% url "grappost:comment" trendingpost.id %}"><img src="{% static "img/comment.png" %}" alt=""></a>
 										<small>{{trendingpost.like.all.count}}</small>
 									</div>
 								</div>
@@ -151,12 +238,33 @@
 			</div>
 		</div>
 	</div>
+	<div class="pagination">
+		<span class="step-links">
+			{% if allPost.has_previous %}
+				<a href="?page=1">&laquo; first</a>
+		        <a href="?page={{ allPost.previous_page_number }}">previous</a>
+			{% endif %}
+			    <span class="current">
+			         Page {{ allPost.number }} of {{ allPost.paginator.num_pages }}.
+				</span>
+			{% if allPost.has_next %}
+			    <a href="?page={{ allPost.next_page_number }}">next</a>
+				<a href="?page={{ allPost.paginator.num_pages }}">last &raquo;</a>
+			{% endif %}
+		</span>
+	</div>
 {% endblock konten1 %}
 
 {% block scriptsOpt %}
 	<script src="{% static "js/grappost/index.js" %}"></script>
 	<script>
 		$(document).ready(function(){
+
+			$("input[name='judul']").on('submit','form.filterform',function(){
+		      if($(this).val().trim().length === 0){
+		        $(this).val("none");
+		      }
+		    })
 
 			$('.lovepost').on('click',function(){
 				$.ajax({

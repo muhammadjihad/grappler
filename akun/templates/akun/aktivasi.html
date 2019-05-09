@@ -1,0 +1,17 @@
+{% autoescape off %}
+	Hallo {{ user.username }},
+	Klik link di bawah ini untuk melakukan konfirmasi akun anda,
+	http://{{ domain }}{% url 'akun:activate' uidb64=uid token=token %}
+
+	Ingat!
+	Tetap jaga kerahasiaan sandi akun kamu, karena kami akan melakukan verifikasi melalui email ini ya!
+
+	Thanks dan Selamat Belajar!
+
+	Flixnote Team,
+	Learn Everything Get Everything
+
+	Alamat :
+	Jl.jatiarum F3 No.12, Kabupaten Bandung
+	+62227833595
+{% endautoescape %}

@@ -1,0 +1,34 @@
+{% autoescape off %}
+	{{local_time}},
+	Hallo {{ koin.user.username }},
+	
+	Saat ini koin anda berjumlah {{koin_show}} koin,
+	dengan status level anda di Flixnote sebagai {{koin.user.profile.get_user_level_display}},
+	maka pembagian keuntungan akan dibagi sebesar:
+
+	{{user_percentage}} -> {{koin.user.username}}
+	{{share_profit}} -> Biaya Admin
+	
+	Sehingga,
+	{{user_money}} diperuntukkan bagi {{koin.user.username}}
+	{{biaya_admin}} diperuntukkan bagi biaya admin
+
+	Berikut adalah nomor verifikasi anda,
+	{{nomor_verifikasi}}
+
+	Silahkan hubungi Costumer Service dan tunjukkan:
+		1. Username anda
+		2. Kode verifikasi di atas
+
+	Ingat!
+	Tetap jaga kerahasiaan sandi akun kamu, karena kami akan melakukan verifikasi melalui email ini ya!
+
+	Thanks dan Selamat Belajar!
+
+	Flixnote Team,
+	Learn Everything Get Everything
+
+	Alamat :
+	Jl.jatiarum F3 No.12, Kabupaten Bandung
+	+62227833595
+{% endautoescape %}

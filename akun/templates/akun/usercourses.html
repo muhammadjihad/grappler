@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/graplearn/index.css" %}">
+	<link rel="stylesheet" href="{% static "css/akun/usercourses.css" %}">
+{% endblock cssOpt %}
+
+{% block konten1 %}
+	<div class="usercourses text-center mt-3">
+		<h4 class="usercourses-title bg-info">Kursus yang dibeli</h4>
+		<br>
+			{% for course,day_left in courses  %}
+			<div class="card text-center courseads">
+				<img src="{{course.thumbnail.url}}" alt="">
+				<div class="card-body">
+					<a href="{% url "graplearn:detailcourse" course.id %}">
+						<div class="container judul">
+							<h5>{{course.judul}}</h5>
+						</div>
+					</a>
+					<div class="coursestatus mt-2">
+						<div class="row">
+							<div class="col-sm-4">
+								<img src="{% static "img/view.png" %}" alt="">
+								<small>{{course.view}}</small>
+							</div>
+							<div class="col-sm-4">
+								<img src="{% static "img/like.png" %}" alt="">
+								<small class="likecount">{{course.coursestatus.like.all.count}}</small>
+							</div>
+							<div class="col-sm-4">
+								<img src="{% static "img/share.png" %}" alt="">
+								<small>{{course.share}}</small>
+							</div>
+						</div>
+					</div>
+					<div class="profilecontainer">
+							<hr>
+						<div class="row">
+								<div class="col-sm-4 fotoprofile">
+									<img src="{{course.user.profile.foto.url}}" alt="">
+								</div>
+								<div class="col-sm-8">
+									<a href="{% url "akun:otherprofile" course.user.id %}"><h5>{{course.user.profile.username}}</h5></a>
+									<div class="boxlevel">
+										<small>{{course.user.profile.get_user_level_display}}</small>
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+					<div class="deskripsi container mt-1">
+						<p>{{course.deskripsi}}</p>
+					</div>
+					{% if user.is_authenticated %}	
+					<div class="container coursebutton">	
+						{% if user in course.coursestatus.like.all %}
+						<button class="btn btn-danger liketoggle" url="{% url "graplearn:coursestatus" "like" course.id %}">Unlike</button>
+						{% else %}
+						<button class="btn btn-success liketoggle" url="{% url "graplearn:coursestatus" "like" course.id %}">Like</button>
+						{% endif %}
+					</div>
+					{% endif %}
+			<span class="expired-badge bg-primary">{{day_left}} Hari Lagi</span>
+			</div>
+		{% endfor %}
+		<div class="clear"></div>
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/graplearn/index.js" %}"></script>
+	<script>
+		$(document).ready(function() {
+			$(".liketoggle").on("click",function(){
+					$.ajax({
+						method:"GET",
+						url:$(this).attr("url"),
+						data:{},
+						success:function(){
+							console.log('berhasil diambil')
+						}
+					});
+					if($(this).text() == 'Like'){
+						$(this).text("Unlike")
+						$(this).removeClass('btn-success')
+						$(this).addClass('btn-danger')
+					} else if($(this).text() == 'Unlike'){
+						$(this).text("Like")
+						$(this).removeClass('btn-danger')
+						$(this).addClass('btn-success')
+					}
+				});
+
+				$(".followtoggle").on("click",function(){
+					if($(this).text() == 'Follow'){
+						$(this).text("Unfollow")
+						$(this).removeClass('btn-primary')
+						$(this).addClass('btn-secondary')
+					} else if($(this).text() == 'Unfollow'){
+						$(this).text("Follow")
+						$(this).removeClass('btn-secondary')
+						$(this).addClass('btn-primary')
+					}
+				});
+		});
+	</script>
+{% endblock scriptsOpt %}

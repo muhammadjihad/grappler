@@ -15,7 +15,7 @@
 				<h1 class="mt-4">{{jumboTag}}</h1>
 			</div>
 			<hr>
-			<h2>Grappler is the largest online learning website on Indonesia</h2>
+			<h2>Flixnote is the largest online learning website on Indonesia</h2>
 	</div>
 	<div class="row beneficial mt-5">
 		<div class="col-sm-4">
@@ -60,12 +60,12 @@
 								<div class="container coursestatus">
 									<div class="row">
 										<div class="col-sm-4">
-											<img src="{% static "img/view.png" %}" alt="">
-											<small>{{course.view}}</small>
+											<img src="{% static "img/user.png" %}" alt="">
+											<small>{{course.coursestatus.student.all.count}}</small>
 										</div>
 										<div class="col-sm-4">
 											<img src="{% static "img/like.png" %}" alt="">
-											<small>{{course.like}}</small>
+											<small>{{course.coursestatus.like.all.count}}</small>
 										</div>
 										<div class="col-sm-4">
 											<img src="{% static "img/share.png" %}" alt="">
@@ -101,6 +101,21 @@
 </div>
 {% endblock konten1 %}
 {% block scriptsOpt %}
+	<script>
+		$(document).ready(function(){
+			$.ajax({
+				method:"GET",
+				url:"http://127.0.0.1:8000/graplearn/api/",
+				data:{},
+				success:function(data){
+					var listItem=(data['results'])
+					listItem.forEach(function(el){
+						console.log(el)
+					})
+				}
+			})
+		});
+	</script>
 	<script src="{% static "js/graplearn/index.js" %}"></script>
 	<script src="{% static "js/home.js" %}"></script>
 {% endblock scriptsOpt %}

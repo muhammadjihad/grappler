@@ -5,14 +5,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from collections import deque
-from akun.models import Dompet, MyCourse, Profile
+from akun.models import Dompet, MyCourse, Profile, Friend, Complaining, ExpiredCourse
 from django.core.files.storage import  FileSystemStorage
 from django.core.paginator import Paginator
+from akun.forms import ComplainingForm
 
 def index(request):
-	courseAds = CourseAdvertisment.objects.all()
+	courseAds = CourseAdvertisment.CourseAdsAll()
 	ListCourse = Course.getAllCourseByLevel()
-	# ListCourse = ListCourse[::-1]
 	course_status = []
 	for course in ListCourse:
 		each_course = CourseStatus.objects.get_or_create(course=course)
@@ -20,7 +20,7 @@ def index(request):
 		course_status.append(
 			(user_liked_course,course)
 			)
-	course_status = Paginator(course_status,14)
+	course_status = Paginator(course_status,15)
 	page = request.GET.get('page')
 	course_status = course_status.get_page(page)
 	context = {
@@ -32,15 +32,24 @@ def index(request):
 
 	if request.method == 'POST':
 		filter_input = request.POST['filter']
-		judul_input = request.POST['judulinput']
-		if judul_input == '':
-			judul_input = 'time'
+		judul_input = request.POST['textinput']
+		kategori_input = request.POST['choiceinput']
+		direct_input = None
+
 		if filter_input == '':
-			filter_input = 'time'
+			filter_input = 'all'
+
+		if judul_input =='' and kategori_input == '':
+			direct_input = 'time'
+		if judul_input == '' and kategori_input != '':
+			direct_input = kategori_input
+		if kategori_input == '' and judul_input != '':
+			direct_input = judul_input
+
 		return redirect(reverse("graplearn:filtercourse",
 			kwargs={
 			"filter_input":filter_input,
-			"judul_input":judul_input
+			"judul_input":direct_input,
 			}))
 
 	return render(request,'graplearn/index.html', context)
@@ -49,7 +58,7 @@ def index_filter(request,filter_input,judul_input):
 
 	ListCourse = None
 	course_status = []
-	courseAds = CourseAdvertisment.objects.all()
+	courseAds = None
 
 	def arrangement():
 		for course in ListCourse:
@@ -61,16 +70,19 @@ def index_filter(request,filter_input,judul_input):
 
 	if filter_input == "judul":
 		ListCourse = Course.objects.filter(judul__contains=judul_input)
+		courseAds = CourseAdvertisment.objects.filter(course__judul__contains=judul_input)
 	elif filter_input == "user_level":
 		ListCourse = Course.filterCourseByLevel(judul_input)
+		courseAds = CourseAdvertisment.filterCourseAdsByLevel(judul_input)
 	elif filter_input == "kategori":
 		ListCourse = Course.objects.filter(kategori__contains=judul_input)
+		courseAds = CourseAdvertisment.objects.filter(course__kategori__contains=judul_input)
 	elif filter_input == "published":
 		ListCourse = Course.objects.all().order_by("-id")
+		courseAds = CourseAdvertisment.objects.all().order_by("-id")
 	else:
 		return redirect("graplearn:index")
 	arrangement()
-
 	course_status = Paginator(course_status,14)
 	page = request.GET.get('page')
 	course_status = course_status.get_page(page)
@@ -83,27 +95,39 @@ def index_filter(request,filter_input,judul_input):
 		'courseAds' :courseAds,
 	}
 
+	if len(courseAds) == 0:
+		context['courseAdsNull'] = 'courseAdsNull'
+
 	if request.method == 'POST':
 		filter_input = request.POST['filter']
-		judul_input = request.POST['judulinput']
-		if judul_input == '':
-			judul_input = 'time'
+		judul_input = request.POST['textinput']
+		kategori_input = request.POST['choiceinput']
+		direct_input = None
+
 		if filter_input == '':
-			filter_input = 'time'
+			filter_input = 'all'
+
+		if judul_input =='' and kategori_input == '':
+			direct_input = 'time'
+		elif judul_input == '' and kategori_input != '':
+			direct_input = kategori_input
+		elif kategori_input == '' and judul_input != '':
+			direct_input = judul_input
 		return redirect(reverse("graplearn:filtercourse",
 			kwargs={
 			"filter_input":filter_input,
-			"judul_input":judul_input
+			"judul_input":direct_input,
 			}))
 
 	return render(request,'graplearn/index.html', context)
-
 
 @login_required
 def createCourse(request):
 
 	courseForm = CourseForm
 	userCourses = MyCourse.objects.get(user = request.user)
+	current_user = User.objects.get(id=request.user.id)
+	current_user_courses = Course.objects.filter(user=request.user)
 
 
 	context = {
@@ -112,19 +136,36 @@ def createCourse(request):
 		'courseForm' : courseForm,
 	}
 
+	def save_new_course():
+		new_course = courseForm.save(commit=False)
+		new_course.user = request.user
+		new_course.save()
+		userProfile = Profile.objects.get(user = request.user)
+		userProfile.gainExp(35)
+		CourseStatus.objects.create(
+				course = new_course
+			)
+		userCourses.courses.add(new_course)
+		return redirect ('graplearn:index')
+
 	if request.method == 'POST':
 		courseForm = CourseForm(request.POST, request.FILES)
 		if courseForm.is_valid():
-			new_course = courseForm.save(commit=False)
-			new_course.user = request.user
-			new_course.save()
-			userProfile = Profile.objects.get(user = request.user)
-			userProfile.gainExp(35)
-			CourseStatus.objects.create(
-					course = new_course
-				)
-			userCourses.courses.add(new_course)
-			return redirect ('graplearn:index')
+			if current_user.profile.user_level == '1' and len(current_user_courses) < 8:
+				save_new_course()
+			elif current_user.profile.user_level == '2' and len(current_user_courses) < 17:
+				save_new_course()
+			elif current_user.profile.user_level == '3' and len(current_user_courses) < 25:
+				save_new_course()
+			elif current_user.profile.user_level == '4' and len(current_user_courses) < 35:
+				save_new_course()
+			elif current_user.profile.user_level == '5' and len(current_user_courses) < 45:
+				save_new_course()
+			elif current_user.profile.user_level == '6':
+				save_new_course()
+			else:
+				messages.info(request,f'Kamu tidak memenuhi persyaratan maksimum unggah kursus berdasarkan level, Tetap Semangat! :)')
+			
 
 	return render(request, 'graplearn/create.html', context)
 	
@@ -162,10 +203,12 @@ def updateCourse(request, id_update):
 
 	return render(request,'graplearn/update.html', context)
 
-
 @login_required
 def detailCourse(request, id_detail):
-
+	try:
+		ExpiredCourse.expired_course_method(request.user.id)
+	except:
+		pass
 	current_user = User.objects.get(id = request.user.id)
 	detailCourse = Course.objects.get(id = id_detail)
 	userCourses = MyCourse.objects.get(user = request.user)
@@ -174,21 +217,19 @@ def detailCourse(request, id_detail):
 	videoCourses = []
 	for video in videoCoursesQuery:
 		videoCourses.append(video)
-	print(videoCourses)
 	videoComment = []
 	for video in videoCourses:
 		videoComment.append(VideoComment.objects.filter(videoCourse_id = video.id))
-	print(videoComment)
 	zipList = zip(videoCourses,videoComment)
 	demovid = None
 	videoDescript = []
 	for desc in videoCourses:
 		videoDescript.append(desc.judul)
-
 	try:
 		demovid = videoCourses[0]
 	except:
 		demovid = 'Tidak ada rangkuman Course'
+	print(videoCourses)
 
 	context = {
 		'judul' : 'Detail',
@@ -197,8 +238,20 @@ def detailCourse(request, id_detail):
 		'userCourses' : userCourses,
 		'videoCourses' : videoCourses,
 		'videoDescript' : videoDescript,
-		'videoComment' : videoComment
+		'videoComment' : videoComment,
+		'videoCoursesCount' : len(videoCourses)
 	}
+
+	try:
+		context['complainCourse'] = Complaining.objects.filter(course=detailCourse).count()
+		sender_user=[]
+		for complain in Complaining.objects.filter(course=detailCourse):
+			sender_user.append(complain.sender_user)
+		if request.user in sender_user:
+			context['alreadycomplain'] = 'Kamu sudah komplain'
+			print('reach')
+	except:
+		pass
 
 	if demovid != 'Tidak ada rangkuman Course':
 		context['demovid'] = demovid
@@ -243,6 +296,47 @@ def addVideoCourse(request,id_course):
 	return render(request,'graplearn/addvideocourse.html', context)
 
 @login_required
+def updateVideoCourse(request,id_video):
+	videoCourse = VideoCourse.objects.filter(id = id_video)
+	course = Course.objects.get(id=videoCourse[0].course.id)
+	if request.user != videoCourse[0].course.user:
+		messages.error(request,'Kamu gaboleh macem macem ya :)')
+		return redirect('home')
+	data = {
+		'course' : videoCourse[0].course,
+		'video' : videoCourse[0].video,
+		'judul' : videoCourse[0].judul,
+		'deskripsi' : videoCourse[0].deskripsi,
+		'published' : videoCourse[0].published,
+		'referensi' : videoCourse[0].referensi,
+	}
+	videoCourseForm = VideoCourseForm(request.POST or None, instance=videoCourse[0], initial=data)
+	context = {
+		'judul' : 'Tambah video kursus',
+		'jumboTag' : 'Berikan sedetail mungkin kursus kamu :)',
+		'course' : course,
+		'videoCourseForm' : videoCourseForm,
+		'videoCourses' : videoCourse,
+	}
+	if request.method == 'POST':
+		videoCourseForm = VideoCourseForm(request.POST, request.FILES, instance=videoCourse[0])
+		if videoCourseForm.is_valid():
+			videoCourseForm.save()
+
+	return render(request,'graplearn/addvideocourse.html', context)
+
+@login_required
+def deleteVideoCourse(request,id_video):
+	video = VideoCourse.objects.get(id=id_video)
+	if video.course.user != request.user:
+		return redirect("akun:profile")
+	else:
+		video.delete()
+		return redirect(reverse("graplearn:detailcourse",kwargs={
+				'id_detail':video.course.id
+			}))
+
+@login_required
 def buy(request,id_course):
 
 	userCourses, created = MyCourse.objects.get_or_create(
@@ -260,15 +354,21 @@ def buy(request,id_course):
 
 	coursePrice = courseTarget.harga
 	context = {}
-
+	courseStatus = CourseStatus.objects.get(course = courseTarget)
 	if dompet.uang >= coursePrice:
 		if courseTarget not in userCourses.courses.all():
+			ExpiredCourse.objects.create(
+					buyed_course = courseTarget,
+					buyed_user = request.user,
+				)
 			userCourses.courses.add(courseTarget)
 			courseTarget.view += 1
-			courseTarget.user.profile.gainExp(50)
+			courseTarget.user.profile.gainExp(50*int(courseTarget.user.profile.user_level))
+			user.profile.gainExp(60*int(user.profile.user_level))
 			dompet.uang -= coursePrice
 			dompetUserCourse.uang += coursePrice
 			courseTarget.save()
+			courseStatus.student.add(request.user)
 			dompetUserCourse.save()
 			dompet.save()
 		else:
@@ -302,15 +402,11 @@ def commentVideo(request,id_comment):
 					user = request.user,
 					comment = komentar, 
 				)
-			return redirect('../../detail/{}'.format(video.course.id))
+			return redirect(reverse("graplearn:detailcourse",kwargs={
+					"id_detail" : video.course.id
+				}))
 
 	return render(request,'graplearn/commentvideo.html', context)
-
-def cobaDetail(request,id_input):
-	context = {
-		'detail' : Course.getDetailCourse(id_input)
-	}
-	return render(request,'graplearn/oke.html',context)
 
 @login_required
 def deleteCourse(request,id_input):
@@ -319,11 +415,55 @@ def deleteCourse(request,id_input):
 	if request.user != course.user:
 		return redirect("graplearn:index")
 	else:
-		course.user.profile.un_gainExp(35)
+		course.user.profile.un_gainExp(35*int(course.user.profile.user_level))
 		course.delete()
 	return redirect("graplearn:index")
 
 @login_required
 def like(request,operation,id_input):
 	CourseStatus.operation(user = request.user,method=operation,id_input=id_input)
+	if operation == 'like':
+		request.user.profile.gainExp(5*int(request.user.profile.user_level))
 	return redirect("graplearn:index")
+
+@login_required
+def complain(request,id_input):
+
+	sender_courses = MyCourse.objects.get(user=request.user)
+	sender_courses = sender_courses.courses.all()
+	this_course = Course.objects.get(id=id_input)
+	receiver_user = User.objects.get(user = request.user)
+	if not this_course in sender_courses:
+		return redirect(reverse("graplearn:detailcourse",kwargs={
+				"id_detail" : id_input,
+			}))
+	latest_complain = Complaining.objects.filter(
+		course=this_course,
+		)
+	latest_users_complain = []
+	for complain in latest_complain:
+		latest_users_complain.append(complain.sender_user)
+	complainForm = ComplainingForm
+	context={
+		'judul' : 'Komplain',
+		'sender_courses' : sender_courses,
+		'complainForm' : complainForm
+	}
+
+	if request.method == 'POST':
+		complainForm = ComplainingForm(request.POST)
+		if request.user in latest_users_complain:
+			Complaining.objects.get(sender_user=request.user).delete()
+		if complainForm.is_valid():
+			new_complain = complainForm.save(commit=False)
+			new_complain.sender_user = request.user
+			new_complain.course = this_course
+			new_complain.receiver_user = this_course.user
+			new_complain.save()
+			receiver_user.profile.gainExp(25*int(receiver_user.profile.user_level))
+			return redirect(reverse("graplearn:detailcourse",kwargs={
+				"id_detail" : id_input,
+			}))
+		
+
+	return render(request,'graplearn/complain.html',context)

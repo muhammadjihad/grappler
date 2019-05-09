@@ -1,0 +1,65 @@
+img.fotoprofile{
+	width:50%;
+	border-radius: 50%;
+	border:1px solid orange;
+}
+
+.legend{
+	background-color:purple;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}
+
+.novice{
+	background-color:lightgreen;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}
+
+.expert{
+	background-color:red;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}
+
+.beginner{
+	background-color:blue;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}
+
+.competent{
+	background-color:orange;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}
+
+.master{
+	background-color:black;
+	border-radius: 4px;
+	padding:1px;
+	line-height:40px;
+	height:40px;
+	width:100%;
+	margin:auto;
+}

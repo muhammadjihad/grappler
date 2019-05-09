@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/grappost/index.css" %}">
+	<link rel="stylesheet" href="{% static "css/graplearn/index.css" %}">
+	<link rel="stylesheet" href="{% static "css/grappost/createcomment.css" %}">
+{% endblock cssOpt %}
+{% block konten1 %}
+	<div class="container postingan mt-4">
+		<div class="profile text-center">
+			<img src="{{postingan.user.profile.foto.url}}" alt="" class="fotoprofile">
+			<h6>{{postingan.user.username}}</h6>
+			<div class="boxlevel mt-2" style="width:15%;">
+				<small>{{postingan.user.profile.get_user_level_display}}</small>
+			</div>
+		</div>
+		<div class="postingan mt-2">
+			<h3>{{postingan.judul}}</h3>
+			<span class="kategoripost">{{postingan.get_kategori_post_display}}</span>
+			<hr>
+			<p>{{postingan.isi}}</p>
+		</div>
+		{% if current_user %}
+		<div class="container text-right">
+			<a href="{% url "grappost:deletepost" postingan.id %}"><button class="btn btn-danger">Hapus</button></a>
+		</div>
+		{% endif %}
+	</div>
+	<div class="container">
+		<hr>
+	</div>
+	<div class="komentar text-center">
+		<span class="judulkomentar bg-warning">Komentar</span>
+	</div>
+	{% for komentar in komentar_postingan  %}
+		<div class="container komentarpostingan mt-3">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="profile text-center">
+						<img src="{{komentar.user.profile.foto.url}}" alt="" class="fotoprofilekomentar">
+						<a href="{% url "akun:otherprofile" komentar.user.id %}"><h6>{{komentar.user.username}}</h6></a>
+						<div class="boxlevel mt-2" style="width:25%;">
+							<small>{{komentar.user.profile.get_user_level_display}}</small>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="komentar">
+						<small class="publishedkomentar">dibuat : <b>{{komentar.published}}</b></small>
+						<hr>
+						<p>{{komentar.isi}}</p>
+					</div>
+				</div>
+			</div>
+			{% if komentar.user == user %}
+				<div class="text-right">
+					<a href="{% url "grappost:deletecomment" komentar.id %}"><button class="btn btn-danger">Hapus</button></a>
+				</div>
+			{% endif %}
+			{% if current_user and komentar.postingan.kategori_post == '3' %}
+			{% if not komentar.helping %}
+				<div class="text-right">
+					<button class="btn btn-success bantutoggle" url="{% url "grappost:helpingcomment" "helping" komentar.id %}">Sangat Membantu</button>
+				</div>
+			{% else %}
+				<div class="text-right">
+					<button class="btn btn-secondary bantutoggle" url="{% url "grappost:helpingcomment" "nothelping" komentar.id %}">Tidak Membantu</button>
+				</div>
+			{% endif %}
+			{% endif %}
+		</div>
+	{% endfor %}
+	
+	{% if not current_user %}
+		<div class="container mt-4">
+			<form method="POST">
+				{% csrf_token %}
+				{{komentarForm}}
+				<button class="btn btn-primary">Kirim!</button>
+			</form>
+		</div>
+	{% endif %}
+
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/graplearn/index.js" %}"></script>
+	<script>
+		$(document).ready(function(){
+			$(".bantutoggle").on("click",function(){
+					$.ajax({
+						method:"GET",
+						url:$(this).attr("url"),
+						data:{},
+						success:function(){
+							console.log('berhasil diambil')
+						}
+					});
+					if($(this).text() == 'Sangat Membantu'){
+						$(this).text("Tidak Membantu")
+						$(this).removeClass('btn-success')
+						$(this).addClass('btn-secondary')
+					} else if($(this).text() == 'Tidak Membantu'){
+						$(this).text("Sangat Membantu")
+						$(this).removeClass('btn-secondary')
+						$(this).addClass('btn-success')
+					}
+				});
+		});
+	</script>
+	<script>
+		const kategori_post = document.querySelectorAll('span.kategoripost')
+		kategori_post.forEach(function(kategori){
+			if(kategori.innerHTML == 'Mencari'){
+				kategori.className += ' mencari'
+			} else if (kategori.innerHTML == 'Promo'){
+				kategori.className += ' promo'
+			} else if (kategori.innerHTML == 'Bertanya'){
+				kategori.className += ' bertanya'
+			}
+		});
+	</script>
+{% endblock scriptsOpt %}

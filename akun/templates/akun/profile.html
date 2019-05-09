@@ -7,51 +7,95 @@
 {% endblock cssOpt %}
 
 {% block konten1 %}
-	{% if userProfile.thumbnail %}
-		<img src="{{userProfile.thumbnail.url}}" alt="" class="thumbnail">
-	{% else %}
-		<img src="{% static "img/background.jpg" %}" alt="" class="thumbnail">
-	{% endif %}
+		<div class="banner">
+			{% if userProfile.thumbnail %}
+				<img src="{{userProfile.thumbnail.url}}" alt="" class="thumbnail">
+			{% else %}
+			{% endif %}
+		</div>
 		<div class="profilecontainer text-center">
 			<div class="row">
-				<div class="col-sm-3">
+				<div class="col-sm-4">
 					<div class="row">
 						<div class="col-sm-6">
 							<img src="{{userProfile.foto.url}}" alt="" class="profilepicture">
 						</div>
 						<div class="col-sm-6">
-							<h6>{{userProfile.nama}}</h6>
+							<h6>{{userProfile.user.username}}</h6>
 							<hr>
 							<div class="userlevel text-white">
 								<small class="mb-5 level">{{userProfile.get_user_level_display}}</small>
 							</div>
+							<h6 class="progress bg-transparent"></h6>
 							<h6 class='mt-3'>{{userProfile.waktu_lahir}}</h6>
+							{% if not other %}
+							<div class="container mt-2">
+								<div class="row">
+									<div class="col-sm-4">
+										<small>{{userCoin}} Koin</small><img src="{% static "img/coin.png" %}" alt="" class="coin">
+									</div>
+									<div class="col-sm-8">
+										<button class="btn-sm btn-primary tukarkoin" url="{% url "akun:tukarkoin" %}">Tukar Koin</button>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% if other %}
+								<a href="{% url "akun:detailpesan" userProfile.user.id %}"><button class="btn btn-outline-primary">Kirim Pesan</button></a>
+							{% endif %}
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-5">
 					<div class="deskripsikanal">
 						<p>{{userProfile.deskripsi_kanal}}</p>
 					</div>
+				{% if not other %}
+					<a href="{% url "akun:updateprofile" userProfile.id %}"><span class="setting"><b>Atur Profile</b></span></a>
+				{% elif other %}
+					{% if userProfile.user in userFriend.users.all %}
+						<span class="followtoggle bg-danger text-white" url="{% url "akun:friendtoggle" "unfollow" userProfile.user.id %}"><b>Unfollow</b></span>
+						<span class="followtoggle bg-primary text-white" url="{% url "akun:friendtoggle" "unfollow" userProfile.user.id %}" style="display:none;"><b>Follow</b></span>
+					{% elif not userProfile.user in userFriend.users.all %}
+						<span class="followtoggle bg-primary text-white" url="{% url "akun:friendtoggle" "follow" userProfile.user.id %}"><b>Follow</b></span>
+						<span class="followtoggle bg-danger text-white" url="{% url "akun:friendtoggle" "unfollow" userProfile.user.id %}" style="display:none;"><b>Unfollow</b></span>
+					{% endif %}
+				{% endif %}
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-3 kontak">
 					<h6>Contact Me:</h6>
 					<hr>
 					<small>{{userProfile.alamat}}</small>
 					<div class="row profilestatus">
-						<div class="col-sm-3">
-							<img src="{% static "img/facebook.png" %}" alt="">
+						<div class="col-sm-2">
+							{% if userProfile.facebook_url %}
+								<a href="{{userProfile.facebook_url}}"><img src="{% static "img/facebook.png" %}" alt=""></a>
+							{% endif %}
 						</div>
-						<div class="col-sm-3">
-							<img src="{% static "img/twitter.png" %}" alt="">
+						<div class="col-sm-2">
+							{% if userProfile.twitter_url %}
+								<a href="{{userProfile.twitter_url}}"><img src="{% static "img/twitter.png" %}" alt=""></a>
+							{% endif %}
 						</div>
-						<div class="col-sm-3">
-							<img src="{% static "img/instagram.png" %}" alt="">
+						<div class="col-sm-2">
+							{% if userProfile.instagram_url %}
+								<a href="{{userProfile.instagram_url}}"><img src="{% static "img/instagram.png" %}" alt=""></a>
+							{% endif %}
 						</div>
-						<div class="col-sm-3">
-							<img src="{% static "img/linkedin.png" %}" alt="">
-						</div><div class="col-sm-3">
-							
+						<div class="col-sm-2">
+							{% if userProfile.facebook_url %}
+								<a href="{{userProfile.linkedin_url}}"><img src="{% static "img/linkedin.png" %}" alt=""></a>
+							{% endif %}
+						</div>
+						<div class="col-sm-2">
+							{% if userProfile.whatsapp_account %}
+								<a href=""><img src="{% static "img/app.ico" %}" alt=""></a>
+							{% endif %}
+						</div>
+						<div class="col-sm-2">
+							{% if userProfile.line_account %}
+								<a href="{{userProfile.linkedin_url}}"><img src="{% static "img/empty.png" %}" alt=""></a>
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -63,32 +107,32 @@
 				<div class="col-sm-2">
 					<img src="{% static "img/user.png" %}" alt="">
 					<small>Students</small><br>
-					<small>25</small>
+					<small>{{students}}</small>
 				</div>
 				<div class="col-sm-2">
 					<img src="{% static "img/semuakursus.png" %}" alt="">
 					<small>Course</small><br>
-					<small>{{userCourse.count}}</small>
+					<small>{{course}}</small>
 				</div>
 				<div class="col-sm-2">
 					<img src="{% static "img/like.png" %}" alt="">
 					<small>Liked</small><br>
-					<small>25</small>
+					<small class="total-like"></small>
 				</div>
 				<div class="col-sm-2">
 					<img src="{% static "img/share.png" %}" alt="">
-					<small>Shared</small><br>
-					<small>25</small>
+					<small>Reviewed</small><br>
+					<small>{{complain}}</small>
 				</div>
 				<div class="col-sm-2">
 					<img src="{% static "img/lovepost.png" %}" alt="">
 					<small>Loved</small><br>
-					<small>25</small>
+						<small>{{lovepost}}</small>
 				</div>
 				<div class="col-sm-2">
 					<img src="{% static "img/answer.png" %}" alt="">
-					<small>Anwered</small><br>
-					<small>25</small>
+					<small>Posted</small><br>
+					<small>{{postingan}}</small>
 				</div>
 			</div>
 		</div>
@@ -99,16 +143,53 @@
 				<div class="col-sm-8">
 					{# Opening video #}
 					<div class="openingvideo">
-						<div class="text-center">	
-							<h2>{{openingVideo.judul}}</h2>
-							<video src="{{openingVideo.video.url}}" autoplay="autoplay" controls="true" oncontextmenu="return false"></video>
-							<small>{{openingVideo.user.profile.deskripsi_kanal}}</small>
+						<div class="text-center">
+							{% if other and openingVideo.video %}
+									<h2>{{openingVideo.judul}}</h2>
+									<div class="ganti">
+									<div class="video-container text-left">
+										<video src="{{openingVideo.video.url}}" oncontextmenu="return false" autoplay="autoplay" class="openingvideo"></video>
+											<div class="video-control-bar">
+												<button class="btn-sm btn-danger">Pause</button>
+												<input class="seekslider custom-range" type="range" min="0" max="100" value="0" step="0.1" style="width:70%;">
+												<span class="ml-3 current-time-text"></span> / <span class="duration-time-text"></span>
+												<input class="volumeslider custom-range ml-3" type="range" min="0" max="100" value="100" step="0.1" style="width:85px;">
+												<button class="btn-sm btn-info ml-3 fullscreen">[&nbsp;]</button>
+											</div>
+									</div>
+									</div>
+									<p class='text-muted'>{{openingVideo.user.profile.deskripsi_kanal}}</p>
+							{% elif not other and openingVideo.video %}
+									<h2>{{openingVideo.judul}}</h2>
+									<div class="ganti">
+										<div class="video-container text-left">
+											<video src="{{openingVideo.video.url}}" oncontextmenu="return false" class="openingvideo" autoplay="autoplay"></video>
+											<div class="video-control-bar">
+												<button class="btn-sm btn-danger">Pause</button>
+												<input class="seekslider custom-range" type="range" min="0" max="100" value="0" step="0.1" style="width:70%;">
+												<span class="ml-3 current-time-text"></span> / <span class="duration-time-text"></span>
+												<input class="volumeslider custom-range ml-3" type="range" min="0" max="100" value="100" step="0.1" style="width:85px;">
+												<button class="btn-sm btn-info ml-3 fullscreen">[&nbsp;]</button>
+											</div>
+										</div>
+										<a href="{% url "akun:updateopeningvideo" %}"><span class="tombol-ganti bg-warning">Ubah</span></a>
+									</div>
+									<p class='text-muted'>{{openingVideo.user.profile.deskripsi_kanal}}</p>
+							{% elif other and not openingVideo.video %}
+									<div></div>		
+							{% elif not other and not openingVideo.video %}
+								<div class="addopeningvideo">
+									<a href="{% url "akun:uploadopeningvideo" %}"><button class="btn btn-success">Add Opening Video</button></a>
+								</div>
+							{% endif %}		
 						</div>
 					</div>
 					<hr>
 					{# UserCourse #}
-					{% for course in userCourse  %}
-						<div class="usercourses text-left">
+					<div class="flixvid">
+					<h4 class="judul-flix bg-warning">Flixvid</h4>
+					{% for course,complain in userCourse  %}
+						<a href="{% url "graplearn:detailcourse" course.id %}" class="link-detailcourse"><div class="usercourses text-left">
 							<div class="thumbnail">
 								<img src="{{course.thumbnail.url}}" alt="">
 							</div>
@@ -121,94 +202,210 @@
 									<div class="col-sm-4">
 										<img src="{% static "img/user.png" %}" alt="">
 										<br>
-										<small>25</small>
+										<small>{{course.coursestatus.student.all.count}}</small>
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/like.png" %}" alt="">
 										<br>
-										<small>25</small>
+										<small class="courselike">{{course.coursestatus.like.all.count}}</small>
 									</div>
 									<div class="col-sm-4">
 										<img src="{% static "img/share.png" %}" alt="">
 										<br>
-										<small>25</small>
+										<small>{{complain}}</small>
 									</div>
 								</div>
 							</div>
 						</div>
+						</a>
 					{% endfor %}
 					<div class="clear"></div>
+					</div>
+					{% if not other %}
+						<div class='text-center'>
+							<a href="{% url "graplearn:createcourse" %}"><button class='btn btn-primary mt-5'>Tambah Kursus</button></a>
+						</div>
+					{% endif %}
 				</div>
 				{# ENDGRAPLEARN #}
 
 				{# GRAPPOST #}
 				<div class="col-sm-4">
-				{% for post in userPost  %}
-					<div class="container postingan">
-						<div class="container judulpostingan"><h6>{{post.judul}}</h6></div>
-						<hr>
-						<div class="isipostingan">
-							<p>{{post.isi}}</p>	
-						</div>
-						<div class="status text-center">
-							<div class="row">
-								<div class="col-sm-6 lovepost">
-									<img src="{% static "img/lovepost.png" %}" alt="">
-									<small>{{post.like.all.count}} Like</small>
+					<div class="flixpost">
+						<h4 class="judul-flix bg-warning">Flixpost</h4>
+							{% for post in userPost  %}
+								<div class="container postingan">
+									<div class="container judulpostingan">
+										<a href="{% url "grappost:comment" post.id %}"><h6>{{post.judul}}</h6></a>
+										<br>
+										<small class="text-muted published">{{post.published}}</small>
+									</div>
+									<hr>
+									<div class="isipostingan">
+										<p>{{post.isi}}</p>	
+									</div>
+									<div class="status text-center">
+										<div class="row">
+											<div class="col-sm-6">
+												<img src="{% static "img/lovepost.png" %}" alt="" class="lovepost" url="{% url "grappost:like" post.id %}">
+												<small>{{post.like.all.count}}</small>
+												{% if user in post.like.all %}
+												<small>Liked</small>
+												{% endif %}
+											</div>
+											<div class="col-sm-6 comment">
+												<a href="{% url "grappost:comment" post.id %}"><img src="{% static "img/comment.png" %}" alt=""></a>
+												<small>{{post.comment.all.count}} comment</small>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="col-sm-6 comment">
-									<img src="{% static "img/comment.png" %}" alt="">
-									<small>{{post.comment.all.count}} comment</small>
-								</div>
-							</div>
-						</div>
+							{% endfor %}
+						<div class="clear"></div>
 					</div>
-				{% endfor %}
-				<div class="clear"></div>
 				</div>
 				{# ENDGRAPPOST #}
 			</div>
 		</div>
-		<hr>
+		<hr class='mt-5'>
 
-		{# Prestasi / Portofolio #}
-		<div class="prestasi">
-			<h4 class="bg-info">Penghargaan</h4>
-			<ul class="list-group text-left">
-			  <li class="list-group-item">Cras justo odio</li>
-			  <li class="list-group-item">Dapibus ac facilisis in</li>
-			  <li class="list-group-item">Morbi leo risus</li>
-			  <li class="list-group-item">Porta ac consectetur ac</li>
-			  <li class="list-group-item">Vestibulum at eros</li>
-			</ul>
+		<div class="pencapaian">
+			<div class="row">
+				<!-- Pencapaian -->
+				<div class="col-sm-6 text-center">
+					<h4 class="judul bg-info">Karir / Penghargaan</h4>
+					<div class="prestasi">
+						<ul class="list-group text-left">
+							{% if userPrestasi %}
+								{% for prestasi in userPrestasi  %}
+							  		<li class="list-group-item text-center">
+							  			<h5>{{prestasi.prestasi}}</h5>
+							  			<small class="text-muted">{{prestasi.waktu}}</small>
+							  			<hr>
+							  			<p>{{prestasi.deskripsi}}</p>
+							  			{% if prestasi.file %}
+							  				<img src="{{prestasi.file.url}}" alt="" class="karya-file">
+							  			{% endif %}
+							  			{% if not other %}
+								  			<div class="delete-button">
+									  			<a href="{% url "akun:deleteprestasi" "karir" prestasi.id %}"><button class="btn btn-danger">Hapus</button></a>
+									  		</div>
+							  			{% endif %}
+							  		</li>
+							  		<br>
+								{% endfor %}
+							{% else %}
+							{% if not other %}
+								<div class="container bg-warning text-center">
+									<p>Kamu bisa memasukkan pencapaian kamu, seperti beberapa <b>prestasi</b>, <b>penghargaan</b>, atau <b>jenjang pendidikan</b> yang mendukung</p>
+								</div>
+							{% else %}
+								<div class="container bg-warning text-center">
+									<p>Belum ada yang diunggah oleh instruktur ini</p>
+								</div>
+							{% endif %}
+							{% endif %}
+						</ul>
+						<div class="text-center mt-2">
+							{% if not other %}
+								<a href="{% url "akun:tambahpenghargaan" %}"><button class='btn btn-primary'>Tambah</button></a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<!-- Karya -->
+				<div class="col-sm-6 text-center">
+					<h4 class="judul bg-info">Karya</h4>
+					<div class="prestasi">
+						<ul class="list-group text-left">
+							{% if userKarya %}
+								{% for karya,extension in userKarya  %}
+							  		<li class="list-group-item text-center">
+							  			<h5>{{karya.judul}}</h5>
+							  			<hr>
+							  			<p>{{karya.keterangan}}</p>
+							  			{% if extension == ".mp4" or extension == ".m4v" %}
+							  				<video src="{{karya.file.url}}" controls="true" oncontextmenu="return false" class="karya-file-video"></video>
+							  			{% elif extension == ".mp3" %}
+							  				<audio src="{{karya.file.url}}" class="karya-file"></audio>
+							  			{% else %}
+							  				<img src="{{karya.file.url}}" alt="" class="karya-file">
+							  			{% endif %}
+							  			{% if not other %}
+								  			<div class="delete-button">
+								  				<a href="{% url "akun:deleteprestasi" "karya" karya.id %}"><button class="btn btn-danger">Hapus</button></a>
+								  			</div>
+							  			{% endif %}
+							  		</li>
+							  		<br>
+								{% endfor %}
+							{% else %}
+							{% if not other %}
+								<div class="container bg-warning text-center">
+									<p>Kamu bisa memasukkan beberapa <b>proyek</b> atau <b>karya</b> yang telah kamu buat, bisa berupa <b>Foto</b> atau <b>Video</b></p>
+								</div>
+							{% else %}
+								<div class="container bg-warning text-center">
+									<p>Belum ada yang diunggah oleh instruktur ini</p>
+								</div>
+							{% endif %}
+							{% endif %}
+						</ul>
+						<div class="text-center mt-2">
+							{% if not other %}
+								<a href="{% url "akun:tambahkarya" %}"><button class='btn btn-primary'>Tambah</button></a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<hr>
 		{# Testimoni #}
-		<div class="container testimoni text-center">
-			<h4 class="bg-info mb-5">Testimoni</h4>
-			<div class="row">
-				{% for testi in testimoni  %}
-						<div class="col-sm-3">
-							<div class="userprofile">
-								<div class="row">
-									<div class="col-sm-6">
-										<img src="{{testi.sender_user.profile.foto.url}}" alt="">
-									</div>
-									<div class="col-sm-6">
-										<h6>{{testi.sender_user.username}}</h6>
-										<div class="userlevel">
-											<small class='level'>{{testi.sender_user.profile.get_user_level_display}}</small>
+		{% if testimoni %}
+			<div class="container testimoni text-center">
+				<h4 class="bg-info mb-5 judul">Testimoni</h4>
+				<div class="row">
+					{% for testi in testimoni  %}
+							<div class="col-sm-3">
+								<div class="userprofile">
+									<div class="row">
+										<div class="col-sm-6">
+											<img src="{{testi.sender_user.profile.foto.url}}" alt="">
+										</div>
+										<div class="col-sm-6">
+											<a href="{% url "akun:otherprofile" testi.sender_user.id %}"><h6>{{testi.sender_user.username}}</h6></a>
+											<div class="userlevel">
+												<small class='level'>{{testi.sender_user.profile.get_user_level_display}}</small>
+											</div>
 										</div>
 									</div>
 								</div>
+								<hr>
+								<small>{{testi.testimoni}}</small><br>
+								<small class='text-muted'>{{testi.published}}</small>
 							</div>
-							<hr>
-							<small>{{testi.testimoni}}</small><br>
-							<small class='text-muted'>{{testi.published}}</small>
-						</div>
-				{% endfor %}
+					{% endfor %}
+				</div>
 			</div>
-		</div>
+		{% else %}
+			<div class="container testimoni text-center">
+				<h4 class="bg-info mb-5">Testimoni</h4>
+			</div>
+		{% endif %}
+		
+		{% if other %}
+		{% if not alreadytest %}
+			<div class="form-testimoni">
+				<form method="POST">
+					{% csrf_token %}
+					{{testimoniForm}}
+					<button class="btn btn-primary">Kirim</button>
+				</form>
+			</div>
+		{% endif %}
+		{% endif %}
 
 		<br>
 		<br>
@@ -216,5 +413,112 @@
 {% endblock konten1 %}
 
 {% block scriptsOpt %}
+	<script>
+	</script>
 	<script src="{% static "js/akun/profile.js" %}"></script>
+	<script>
+		let courselike = document.querySelectorAll('.courselike');
+		let like_total = 0;
+		courselike.forEach( function(el) {
+			like_total = like_total + parseInt(el.innerHTML)
+		});
+		let total_like_html = document.querySelector('.total-like');
+		total_like_html.innerHTML = like_total;
+		const maxBeginner = 1000
+		const maxCompetent = 7000
+		const maxExpert = 35000
+		const maxMaster = 200000
+		const maxLegend = 1000000
+		const maxNative = 10000000
+		const user_exp = document.querySelector('h6.progress');
+		const user_level = document.querySelector('small.level').innerHTML.toLowerCase()
+		var progressPercentage = function(level){
+			if(level == 'novice'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxBeginner*100).toFixed(2)) + ' % menuju Beginner';
+			}
+			if(level == 'beginner'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxCompetent*100).toFixed(2)) + ' % menuju Competent';
+			}
+			if(level == 'competent'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxExpert*100).toFixed(2)) + ' % menuju Expert';
+			}
+			if(level == 'expert'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxMaster*100).toFixed(2)) + ' % menuju Master';
+			}
+			if(level == 'master'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxLegend*100).toFixed(2)) + ' % Menuju Legend';
+			}
+			if(level == 'legend'){
+				user_exp.innerHTML = ((parseInt("{{userProfile.user_exp}}")/maxNative*100).toFixed(2)) + ' % Menuju ...';
+			}
+		};
+		progressPercentage(user_level);
+		
+	</script>
+	<script>
+		$(document).ready(function(){
+			const tombolTukarKoin = $('button.tukarkoin')
+			tombolTukarKoin.on('click',function(){
+				Swal.fire({
+				  title: 'Anda yakin akan menukarkan koin sekarang?',
+				  text: "K",
+				  type: 'info',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Tukar',
+				  cancelButtonText:'Simpan Dulu',
+				}).then((result) => {
+				  if (result.value) {
+				    Swal.fire(
+				      'Koin berhasil di tukar!',
+				      'Silahkan Cek Email kamu :)',
+				      'success'
+				    )
+				  	window.location.href=$(this).attr('url')
+				  }
+				})
+			});
+
+
+			$('.lovepost').on('click',function(){
+				$.ajax({
+					method:"GET",
+					url:$(this).attr('url'),
+					data:{},
+					success:function(){
+						console.log('ajax berhasil')
+					},
+				})
+				let likeSymbol=$(this).next().next()
+				if(likeSymbol.text() == 'Liked'){
+					$(this).next().text(parseInt($(this).next().text())-1)
+					$(this).next().next().remove()
+				} else {
+					$(this).next().text(parseInt($(this).next().text())+1)
+					$(this).next().after("<small class='like'>Liked</small>")
+				}
+			});
+
+			$('span.followtoggle').on('click',function(){
+				$.ajax({
+					method:"GET",
+					url:$(this).attr('url'),
+					data:{},
+					success:function(){
+						console.log('ajax berhasil')
+					},
+				});
+				console.log($(this).children('b').html())
+				if($(this).children('b').html().toLowerCase()=='unfollow'){
+					$(this).css('display','none')
+					$(this).next().css('display','inline')
+				}
+				if($(this).children('b').html().toLowerCase()=='follow'){
+					$(this).css('display','none')
+					$(this).next().css('display','inline')
+				}
+			});
+		});
+	</script>
 {% endblock scriptsOpt %}

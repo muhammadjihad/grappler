@@ -2,13 +2,11 @@
 	background-color: white;
 	border-radius: 10px;
 	border: 2px solid white;
-	height:250px;
 	margin-top: 250px;
 	opacity: 0.8;
 	width:400px;
 }
 #loginForm:hover{
 	background-color: white;
-	height:250px;
 	opacity: 1;
 }

@@ -32,3 +32,11 @@ nav div.form button{
 	float: left;
 }
 
+div.footer{
+	background-color:lightgrey;
+	padding:7px;
+}
+
+button:hover{
+	cursor: pointer;
+}

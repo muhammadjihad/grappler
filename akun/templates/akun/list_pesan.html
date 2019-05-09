@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/akun/profile.css" %}">
+	<link rel="stylesheet" href="{% static "css/akun/list_pesan.css" %}">
+{% endblock cssOpt %}
+
+{% block konten1 %}
+	<div class="container mt-5">
+		<h4>Pesan Masuk</h4>
+	</div>
+	<hr>
+	<div class="container text-center mt-4">
+		{% for pesan in pesan_masuk  %}
+			<a href="{% url "akun:detailpesan" pesan.sender_user.id %}">
+				<div class="container mt-4 bg-white pesan">
+					<div class="row">
+						<div class="col-sm-4">
+							<img src="{{pesan.sender_user.profile.foto.url}}" alt="" class="profilepicture">
+							<br>
+							<small>{{pesan.sender_user.username}}</small>
+							<div class="userlevel text-white" style="width:75px;">
+									<small class="mb-5 level">{{pesan.sender_user.profile.get_user_level_display}}</small>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="waktu">
+								<small>{{pesan.waktu_kirim}}</small>
+							</div>
+							<hr>
+							<p class="isipesan">{{pesan.pesan}}</p>
+						</div>
+					</div>
+					{% if not pesan.read %}
+						<span class="unread bg-primary text-white">Baru!</span>
+					{% endif %}
+				</div>
+			</a>
+		{% endfor %}
+	</div>
+{% endblock konten1 %}
+
+{% block scriptsOpt %}
+	<script src="{% static "js/akun/profile.js" %}"></script>
+{% endblock scriptsOpt %}

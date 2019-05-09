@@ -2,11 +2,12 @@
 {% load static %}
 
 {% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/akun/profile.css" %}">
 	<link rel="stylesheet" href="{% static "css/graplearn/detailcourse.css" %}">
 {% endblock cssOpt %}
 
 {% block konten1 %}
-	<div class="container">
+	<div class="container profilepage">
 		<div class="row">
 			{# Kolom Untuk Profile #}
 			<div class="col-sm-4" id='profilesection'>
@@ -20,8 +21,12 @@
 					<div class="container userprofile text-center">
 						<img src="{{detailCourse.user.profile.foto.url}}" alt="">
 						<h4><a href="{% url "akun:otherprofile" detailCourse.user.id %}">{{detailCourse.user.profile.nama}}</a></h4>
-						<div class="boxlevel">
-							<small>{{detailCourse.user.profile.get_user_level_display}}</small>
+						{% if detailCourse.user.profile.verified %}
+							<img src="{% static "img/verified.png" %}" alt="" class="verifieduser">
+							<small class="text-muted">Verified</small>
+						{% endif %}
+						<div class="userlevel text-white">
+							<small class="mb-5 level">{{detailCourse.user.profile.get_user_level_display}}</small>
 						</div>
 						<hr>
 						<p>{{detailCourse.user.profile.bio}}</p>
@@ -29,7 +34,7 @@
 				</div>
 				<div class="container coursedemo">
 					<div class="videodemo">
-						<h6>Course Preview</h6>
+						<h6>Ulasan Kursus</h6>
 						{% if demovid %}
 							<video src="{{demovid.video.url}}" oncontextmenu="return false" controls=""></video>
 						{% else %}
@@ -64,20 +69,29 @@
 				<hr>
 				<div class="coursestatus">
 					<div class="row">
-						<div class="col-sm-4">
-							<img src="{% static "img/view.png" %}" alt="">
-							<h5>{{detailCourse.view}}</h5>
-							<small>Viewed</small>
+						<div class="col-sm-3">
+							<img src="{% static "img/user.png" %}" alt="">
+							<h5>{{detailCourse.coursestatus.student.all.count}}</h5>
+							<small>Student</small>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<img src="{% static "img/like.png" %}" alt="">
-							<h5>{{detailCourse.like}}</h5>
+							<h5>{{detailCourse.coursestatus.like.count}}</h5>
 							<small>Liked</small>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<img src="{% static "img/share.png" %}" alt="">
-							<h5>{{detailCourse.share}}</h5>
-							<small>Shared</small>
+							{% if complainCourse %}
+								<h5>{{complainCourse}}</h5>
+							{% else %}
+								<h5>0</h5>
+							{% endif %}
+							<small>Reviewed</small>
+						</div>
+						<div class="col-sm-3">
+							<img src="{% static "img/course.png" %}" alt="">
+							<h5>{{videoCoursesCount}}</h5>
+							<small>Video</small>
 						</div>
 					</div>
 					<hr>
@@ -85,8 +99,15 @@
 					<p>Diterbitkan : {{detailCourse.published}}</p>
 					{% if authUser %}
 						<a href="{% url "graplearn:addvideocourse" detailCourse.id %}"><button class="btn btn-primary">+ Video</button></a>
-						<a href="{% url "graplearn:updatecourse" detailCourse.id %}"><button class="btn btn-warning">Update</button></a>
-						<a href="{% url "graplearn:deletecourse" detailCourse.id %}"><button class="btn btn-danger">Hapus</button></a>
+						<a href="{% url "graplearn:updatecourse" detailCourse.id %}"><button class="btn btn-warning">Setting</button></a>
+						<button class="btn btn-danger delete-button" url="{% url "graplearn:deletecourse" detailCourse.id %}">Hapus</button>
+					{% endif %}
+					{% if detailCourse in userCourses and not authUser %}
+						<a href="{% url "graplearn:complain" detailCourse.id %}"><button class="btn btn-danger">Review</button></a>
+					{% if alreadycomplain %}
+							<br>
+							<small>{{alreadycomplain}}</small>
+					{% endif %}
 					{% endif %}
 					<hr>
 					<div class="row">
@@ -95,17 +116,23 @@
 							<h5>{{detailCourse.kategori}}</h5>
 						</div>
 						<div class="col-sm-6">
-							<a href="{% url "graplearn:buycourse" detailCourse.id %}">
-								<div class="harga">
+							{% if not detailCourse in userCourses %}
+								<div class="harga" url="{% url "graplearn:buycourse" detailCourse.id %}">
 									<img src="{% static "img/coin.png" %}" alt="">
-									{% if not detailCourse in userCourses %}
 										<h5>{{detailCourse.harga}}</h5>
+									<div class="clear"></div>
+								</div>
+							{% else %}
+								<div class="terbeli" url="{% url "graplearn:buycourse" detailCourse.id %}">
+									<img src="{% static "img/coin.png" %}" alt="">
+									{% if detailCourse.user == user %}
+										<h5>Ini adalah kursus anda</h5>
 									{% else %}
 										<h5>kamu sudah membeli course ini</h5>
 									{% endif %}
 									<div class="clear"></div>
 								</div>
-							</a>
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -116,8 +143,18 @@
 		{% for video in videoCourses  %}
 		<div class="container video">
 			<h4>{{video.judul}}</h4>
-			<video src="{{video.video.url}}" controls="true" oncontextmenu="return false"></video>
-			<div class="deskripsi">
+			<hr align="left" width="25px">
+			<div class="video-container text-left">
+				<video src="{{video.video.url}}" oncontextmenu="return false" class="openingvideo"></video>
+				<div class="video-control-bar">
+					<button class="btn-sm btn-primary">Play</button>
+					<input class="seekslider custom-range" type="range" min="0" max="100" value="0" step="0.1" style="width:70%;">
+					<span class="ml-3 current-time-text"></span> / <span class="duration-time-text"></span>
+					<input class="volumeslider custom-range ml-3" type="range" min="0" max="100" value="100" step="0.1" style="width:80px;">
+					<button class="btn-sm btn-info ml-3 fullscreen">[&nbsp;]</button>
+				</div>
+			</div>
+			<div class="deskripsi mt-2">
 				<h6>Deskripsi</h6>
 				<p>{{video.deskripsi}}</p>
 				<hr>
@@ -128,11 +165,80 @@
 					<small>245 comments</small>
 				</div>
 			</div>
+			{% if authUser %}
+				<div class="pengaturan">
+					<a href="{% url "graplearn:updatevideocourse" video.id %}"><button class="btn-sm btn-warning">Ubah</button></a>
+					<button class="btn-sm btn-danger deletevideo" url="{% url "graplearn:deletevideocourse" video.id %}">Hapus</button>
+				</div>
+			{% endif %}
 		</div>
 		{% endfor %}
 	</div>
 {% endblock konten1 %}
 
 {% block scriptsOpt %}
-	<script src="{% static "js/graplearn/detailcourse.js" %}"></script>
+	<script src="{% static "js/akun/profile.js" %}"></script>
+	<script>
+		$(document).ready(function(){
+			const tombolHapus = $('button.delete-button')
+			tombolHapus.on('click',function(){
+				Swal.fire({
+				  title: 'Anda yakin akan menghapus serial ini?',
+				  text: "Kamu akan kehilangan apapun yang berkaitan dengan kursus ini",
+				  type: 'warning',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Hapus',
+				  cancelButtonText:'Tidak jadi',
+				}).then((result) => {
+				  if (result.value) {
+				    Swal.fire(
+				      'Deleted!',
+				      'Your file has been deleted.',
+				      'success'
+				    )
+				  	window.location.href=$(this).attr('url')
+				  }
+				})
+			});
+
+			const tombolBeli = $('div.harga')
+			tombolBeli.on('click',function(){
+				Swal.fire({
+				  title: 'Anda yakin akan membeli serial kursus dengan judul "{{detailCourse.judul}}" ini?',
+				  text:"Harga kursus ini adalah {{detailCourse.harga}} Koin",
+				  type: 'info',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Beli',
+				  cancelButtonText:'Tidak jadi',
+				}).then((result) => {
+				  if (result.value) {
+				  	window.location.href=$(this).attr('url')
+				  }
+				})
+			})
+
+			const deleteVideo = $('button.deletevideo')
+			console.log(deleteVideo)
+			deleteVideo.on('click',function(){
+				Swal.fire({
+				  title: 'Anda yakin akan menghapus video ini?',
+				  type: 'info',
+				  showCancelButton: true,
+				  confirmButtonColor: '#d33',
+				  cancelButtonColor: '#3085d6',
+				  confirmButtonText: 'Hapus',
+				  cancelButtonText:'Tidak jadi',
+				}).then((result) => {
+				  if (result.value) {
+				  	window.location.href=$(this).attr('url')
+				  }
+				})
+			})
+
+		});
+	</script>
 {% endblock scriptsOpt %}

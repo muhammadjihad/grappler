@@ -1,0 +1,32 @@
+img.fotoprofile{
+	width:150px;
+	height:150px;
+	border-radius: 50%;
+}
+
+img.fotoprofilekomentar{
+	width:70px;
+	height:70px;
+	border-radius: 50%;
+}
+
+div.container.komentarpostingan{
+	padding:10px;
+	background-color: white;
+	border-radius: 7px;
+}
+
+div.komentar{
+	margin-bottom: 15px;
+	margin-top: 25px;
+}
+
+span.judulkomentar{
+	padding: 10px;
+	border-radius: 7px;
+	color:white;
+}
+
+small.publishedkomentar{
+	color:black;
+}

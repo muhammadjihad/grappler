@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block konten1 %}
+	<div class="container">
+		<form method='POST' enctype="multipart/form-data">
+			{% csrf_token %}
+			{{formPenghargaan|crispy}}
+			<button type="submit" class="btn btn-primary">Tambah</button>
+		</form>
+	</div>
+{% endblock konten1 %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block cssOpt %}
+	<link rel="stylesheet" href="{% static "css/help/topupkoin.css" %}">
+{% endblock cssOpt %}
+
+{% block konten1 %}
+	<div class="container text-center mt-4">
+		<h1>Petunjuk - Penukaran Koin</h1>
+		<hr>
+		<div class="container via-bank text-left">
+			<h6>1. Via Transfer Bank</h6>
+			<ul class="list-group">
+				<li class="list-group-item"><b>1.</b> Tekan tombol "Tukar" pada laman <b>Profile</b></li>
+				<li class="list-group-item"><b>2.</b> Konfirmasi ke Costumer Service kami
+					<br>
+					<br>
+					Daftar Costumer Service :
+					<table class="table">
+					  <thead class="bg-warning">
+					    <tr>
+					      <th scope="col">Costumer Service</th>
+					      <th scope="col">WhatsApp/Pesan</th>
+					      <th scope="col">Line</th>
+					      <th scope="col">Email</th>
+					      <th scope="col">Facebook</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <th scope="row">Kak Jihad</th>
+					      <td><a href="https://api.whatsapp.com/send?phone=6281224594012&text=Halo%20%3a%29&source=&data=">081224594012</a></td>
+					      <td>@jihadabdrahman</td>
+					      <td>cs1@flixnote.com</td>
+					      <td>jihadd abbdurahman</td>
+					    </tr>
+					    <tr>
+					      <th scope="row">Kak Etty</th>
+					      <td><a href="https://api.whatsapp.com/send?phone=6283875793543&text=Halo%20%3a%29&source=&data=">083875793543</a></td>
+					      <td>@helloetty</td>
+					      <td>cs2@flixnote.com</td>
+					      <td>etty rofiqotul wakhidah</td>
+					    </tr>
+					  </tbody>
+					</table>
+					<small class='text-muted'>*Pilih Salah Satu Costumer Service dan Salah satu Kontaknya saja ya! :)</small>
+				</li>
+				<li class="list-group-item"><b>3.</b> Verifikasi User Melalui Email</li>
+				<li class="list-group-item">
+					<b>4.</b> Proses Transfer dan Restart Koin <br>
+					<small class="text-muted"><a href="{% url "help:sistemlevel" %}">*Baca ketentuan konversi koin pada masing masing level</a></small><br>
+					<small class="text-muted"><a href="">*Baca juga kenapa flixnote memberikan peraturan seperti itu</a></small>
+				</li>
+				<li class="list-group-item"><b>5.</b> Selesai :)</li>
+			</ul>
+		</div>
+	</div>
+	<div class="container mt-4 bg-info text-white warning-tag">
+		<h5><b>INFO</b></h5>
+		<hr>
+		<h6>Kami sedang mengusahakan opsi metode penukaran koin lainnya :) <b>Stay Tune Terus ya!</b></h6>
+	</div>
+	<div class="container mt-4 bg-danger text-white warning-tag">
+		<h5><b>JAGA PASSWORD AKUN KAMU!</b></h5>
+		<hr>
+		<h6>Admin hanya akan memverifikasi kamu berdasarkan biodata di akun kamu dan mengirimkan kode verifikasi ke nomor HP yang tertera di profile, jadi <b>JAGALAH AKUN KAMU</b></h6>
+	</div>
+{% endblock konten1 %}

@@ -1,3 +1,9 @@
+div.container.null-course{
+	margin:auto;
+	padding:10px;
+	border-radius: 7px;
+}
+
 div.container.courseadscontainer{
 	align-items: center;
 	align-content: center;
@@ -37,7 +43,31 @@ div.card.courseads:hover img.verified{
 	}
 }
 
+div.nama img.verifieduser{
+	width:20px;
+	height:20px;
+}
 
+div.nama small.verified-text{
+	font-size: 1px;
+	color:black;
+}
+
+div.nama{
+	margin:7px;
+	position: relative;
+}
+
+div.wrapper-all-course{
+	position: relative;
+}
+
+div.all-course{
+	width:85%;
+	margin:auto;
+	position: relative;
+	left:90px;
+}
 
 .filterindex{
 	margin-top: 20px;
@@ -46,8 +76,9 @@ div.card.courseads:hover img.verified{
 	display: block;
 	width:250px;
 	float: left;
-	margin:6px;
+	margin:10px;
 	opacity: 0.9;
+	position: relative;
 }
 .card:hover{
 	box-sizing: border-box;
@@ -126,9 +157,8 @@ div.coursestatus small{
 	color:black;
 }
 
-button.liketoggle, button.followtoggle{
+button.liketoggle{
 	margin-bottom: 5px;
-	margin-top: -20px;
 	position: relative;
 	z-index: 50;
 }

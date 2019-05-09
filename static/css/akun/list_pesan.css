@@ -1,0 +1,72 @@
+div.pesan{
+	padding: 10px;
+	border-radius: 7px;
+	box-sizing: border-box;
+	position: relative;
+}
+
+img.profilepicture{
+	width:50px;
+	height:50px;
+	border-radius: 50%;
+}
+
+a{
+	text-decoration: none;
+	color:inherit;
+}
+
+span.unread{
+	padding: 5px;
+	border-radius: 7px;
+	position: absolute;
+	top:-5px;
+	right:-5px;
+}
+
+small.sender-read-status{
+	display: inline-block;
+	padding: 2px;
+	border-radius: 5px;
+	color:white;
+	margin-bottom: 10px;
+}
+
+div.containerpesan{
+	padding: 15px;
+	border-radius: 7px;
+	height:500px;
+	overflow: auto;
+}
+
+p.sender_pesan, p.receiver_pesan{
+	display: inline-block;
+	padding: 10px;
+	border-radius: 7px;
+	color:white;
+}
+
+p.sender_pesan{
+	background-color: grey;
+}
+
+p.receiver_pesan{
+	background-color: lightgrey;
+}
+
+img.chat_picture{
+	width:25px;
+	height: 25px;
+	border-radius: 50%;
+}
+
+label{
+	display: none;
+}
+
+p.isipesan{
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 85%;
+	white-space: nowrap;
+}

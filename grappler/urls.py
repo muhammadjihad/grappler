@@ -22,12 +22,14 @@ from django.contrib import admin
 
 urlpatterns = [
     path('graplearn/api/',include('graplearn.api.urls', namespace='graplearn-api')),
+    path('akun/api/',include('akun.api.urls', namespace='akun-api')),
     path('grappost/',include('grappost.urls',namespace='grappost')),
     path('graplearn/',include('graplearn.urls', namespace='graplearn')),
     path('akun/',include('akun.urls', namespace='akun')),
     path('',views.index, name='home'),
     path('teruslahberjuang/', admin.site.urls),
+    path('help/',include('help.urls', namespace='help'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-admin.site.site_header = "grappler Inc. | Find Anything Learn Everything"
-admin.site.site_title = "grappler Inc. | Find Anything Learn Everything"
+admin.site.site_header = "Flixnote | Find Anything Learn Everything"
+admin.site.site_title = "Flixnote | Find Anything Learn Everything"

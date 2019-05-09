@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from graplearn.models import Course
+from graplearn.models import Course, CourseStatus
 from operator import itemgetter
 
 def index(request):
@@ -7,7 +7,9 @@ def index(request):
 	userCourses = Course.objects.all()
 	userLike = []
 	for course in userCourses:
-		userLike.append((course.like,course.id))
+		userLike.append((
+			(CourseStatus.objects.get(course=course).like.all().count()*0.3)+(CourseStatus.objects.get(course=course).student.all().count()*0.7)
+			,course.id))
 	sortedCourse = (sorted(userLike, reverse=True))
 	trendingCourses = []
 	i = 0
@@ -17,10 +19,9 @@ def index(request):
 	showCourses = trendingCourses[:6]
 
 	context = {
-		'judul' : 'Grappler | The Most Online Learning in Indonesia',
+		'judul' : 'Flixnote | The Most Online Learning in Indonesia',
 		'jumboTag' : 'Learn Anything, Get Everything',
 		'trendingCourses' : showCourses
-
 	}
 
 	return render(request,'index.html',context)

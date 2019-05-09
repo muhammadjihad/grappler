@@ -88,6 +88,14 @@ div.container div.index div.container.postingan div.status img{
 	z-index: 20
 }
 
+div.nofriend{
+	width:100%;
+	background-color: white;
+	padding: 25px;
+	margin-top: 15px;
+	border-radius: 7px;
+}
+
 div.container div.index div.container.postingan div.status img:hover{
 	width:30px;
 	height: 30px;
@@ -201,6 +209,27 @@ div.container div.trendingpost div.status small{
 	margin:auto;
 }
 
+.promo{
+	background-color: blue;
+	padding: 6px;
+	border-radius: 5px;
+	color:white;
+}
+
+.mencari{
+	background-color: red;
+	padding: 6px;
+	border-radius: 5px;
+	color:white;
+}
+
+.bertanya{
+	background-color: green;
+	padding: 6px;
+	border-radius: 5px;
+	color:white;
+}
+
 @keyframes showUp{
 	
 	0%{
@@ -240,4 +269,17 @@ div.index div.container.postingan div.container.userprofilepost img{
 	height: 35px;
 	border-radius: 50%;
 	border: 1px solid white;
+}
+
+div.container.filter-post{
+	width:100%;
+	border-radius: 5px;
+	margin-top: 15px;
+	padding: 5px;
+}
+
+span.followed, span.explore{
+	padding: 5px;
+	background-color:orange;
+	border-radius: 5px;
 }

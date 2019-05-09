@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from operator import itemgetter
 from django.urls import reverse
+from datetime import timedelta, date
 # Create your models here.
 
 
@@ -14,9 +15,6 @@ class Course(models.Model):
 	harga = models.PositiveIntegerField()
 	deskripsi = models.TextField(max_length=300)
 	published = models.DateTimeField(auto_now_add=True)
-	like = models.PositiveIntegerField(default=0)
-	view = models.PositiveIntegerField(default=0)
-	share = models.PositiveIntegerField(default=0)
 	discount = models.DecimalField(decimal_places=2, max_digits=10,default=0)
 	def __str__(self):
 		return '{}-{}'.format(self.user, self.judul)
@@ -53,14 +51,43 @@ class Course(models.Model):
 class CourseAdvertisment(models.Model):
 	course = models.OneToOneField(Course, on_delete=models.CASCADE)
 	start = models.DateField(auto_now_add=True)
+	duration=models.PositiveIntegerField(default=30)
 
 	def __str__(self):
 		return self.course.judul
 
+	def expired_ads_system(self):
+		date_expired = self.start + timedelta(days=self.duration)
+		if date.today() >= date_expired:
+			self.delete()
+	
+	@classmethod
+	def CourseAdsAll(cls):
+		courses = cls.objects.all()
+		list_course=[]
+		for course in courses:
+			course.expired_ads_system()
+			list_course.append(course)
+		return list_course
+	@classmethod
+	def filterCourseAdsByLevel(cls, filter):
+		courses = cls.objects.all()
+		list_courses = []
+		for course in courses:
+			if course.course.user.profile.get_user_level_display() == filter.capitalize():
+				date_expired=course.start+timedelta(days=course.duration)
+				print(date_expired)
+				if date.today() > date_expired:
+					course.delete()
+				else:
+					list_courses.append(course)
+		return list_courses
+
+
 class CourseStatus(models.Model):
 	course = models.OneToOneField(Course, on_delete=models.CASCADE)
 	like = models.ManyToManyField(User, blank=True, related_name='like')
-	view = models.ManyToManyField(User, blank=True, related_name='view')
+	student = models.ManyToManyField(User, blank=True, related_name='view')
 
 	def __str__(self):
 		return self.course.judul
@@ -77,6 +104,15 @@ class CourseStatus(models.Model):
 			else:
 				course_status[0].like.remove(user)
 		return reverse("graplearn:index")
+
+	@classmethod
+	def getCourseLike(cls,course):
+		like=0
+		userCourse = cls.objects.filter(course=course)
+		for course in userCourse:
+			user_like = course.like.all()
+			like += len(user_like)
+		return like
 
 class VideoCourse(models.Model):
 
@@ -101,3 +137,13 @@ class VideoComment(models.Model):
 
 	def __str__(self):
 		return '{}-{}'.format(self.user,self.videoCourse)
+
+class ComplainCourse(models.Model):
+
+	sender_user = models.ForeignKey(User, on_delete=models.CASCADE)
+	course = models.ForeignKey(Course, on_delete=models.CASCADE)
+	complain = models.TextField()
+	solusi = models.TextField()
+
+	def __str__(self):
+		return self.course.judul

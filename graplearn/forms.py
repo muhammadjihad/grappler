@@ -35,11 +35,14 @@ class CourseForm(forms.ModelForm):
 			'harga' : forms.NumberInput(
 					attrs = {
 						'class' : 'form-control form-group',
-						'placeholder' : "Harga Kursus"
+						'placeholder' : "Harga Kursus Perbulan"
 					}
 				),
 			'thumbnail' : forms.FileInput(
 				),
+		}
+		labels={
+			'harga':'Harga perbulan'
 		}
 
 class VideoCourseForm(forms.ModelForm):
